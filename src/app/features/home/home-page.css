@@ -1,4 +1,3 @@
-
 .welcome-section {
   display: flex;
   justify-content: center;
@@ -7,7 +6,15 @@
   padding: 1.5rem;
   text-align: center;
   background-color: #121212; /* Fondo */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 .welcome-card {
@@ -17,14 +24,12 @@
   flex-direction: column;
   gap: 1.5rem;
   align-items: center;
-  
 }
 
 .welcome-card h1 {
   font-size: 2.5rem;
   font-weight: 800;
   color: #ffffff;
-;
 }
 
 .welcome-card p {
@@ -34,7 +39,7 @@
 }
 
 .btn-explore {
-  background-color: #f5c518; 
+  background-color: #f5c518;
   color: #000000;
   border: none;
   padding: 0.85rem 2rem;
@@ -44,7 +49,9 @@
   cursor: pointer;
   width: 100%;
   max-width: 35rem;
-   transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .btn-explore:hover {
@@ -52,11 +59,11 @@
 }
 
 .welcome-card h1 {
-  font-size: 2rem; /* móvil */
+  font-size: 2rem; /* movil */
 }
 
 @media (min-width: 768px) {
   .welcome-card h1 {
-    font-size: 2.5rem; /* pantallas grandes */
+    font-size: 2.5rem;
   }
 }

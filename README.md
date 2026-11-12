@@ -65,6 +65,9 @@ src/app/
 │
 ├── shared/  → solo lo que usan 2+ 
 │   ├── components/
+│   │      ├── header/
+│   │      └── footer/
+│   │ 
 │   ├── pipes/
 │   ├── directives/
 │   └── ui/
@@ -80,8 +83,8 @@ src/app/
 ├── features/
 │   │
 │   ├── home/
-│   │   └── pages/
-│   │       └── home-page
+│   │     └── pages/
+│   │           └── home-page
 │   │
 │   ├── movies/
 │   │   ├── pages/
@@ -92,6 +95,14 @@ src/app/
 │   │        ├── movie-card
 │   │        ├── movie-gallery
 │   │        └── search-bar // Posibilidad de ponerlo en Shared
+│   │
+│   ├── favorites/
+│   │     ├── pages/
+│   │     ├── components/
+│   │     └── models/               (favorito + puntuación)
+│   │           └── fav-model.ts
+│   │
+│   ├── profile/
 │   │       
 │   ├── people/  →  actor y director
 │   │     ├── pages/
@@ -102,14 +113,6 @@ src/app/
 │   │     ├── components/
 │   │     └── models/               (modelos exclusivos de auth)
 │   │          └── auth-model.ts
-│   │   
-│   ├── favorites/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   └── models/               (favorito + puntuación)
-│   │          └── fav-model.ts
-│   │
-│   ├── profile/
 │   │
 │   └── stats/
 │
