@@ -9,5 +9,5 @@ import { RouterLink } from '@angular/router';
 export class HomePage {
   title = "Bienvenido";
   subtitle = "Descubre, explora y gestiona tus películas favoritas en un solo lugar.";
-  buttonHome = "Explorar"
+  buttonHome = "Explorar películas"
 }

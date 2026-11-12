@@ -34,7 +34,7 @@
 }
 
 .btn-explore {
-  background-color: #f5c518; /* Amarillo estilo cine */
+  background-color: #f5c518; 
   color: #000000;
   border: none;
   padding: 0.85rem 2rem;
@@ -49,4 +49,14 @@
 
 .btn-explore:hover {
   background-color: #d4a912;
+}
+
+.welcome-card h1 {
+  font-size: 2rem; /* móvil */
+}
+
+@media (min-width: 768px) {
+  .welcome-card h1 {
+    font-size: 2.5rem; /* pantallas grandes */
+  }
 }
