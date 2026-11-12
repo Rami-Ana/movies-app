@@ -27,7 +27,7 @@
 }
 
 .welcome-card h1 {
-  font-size: 2.5rem;
+ font-size: 2rem; /* móvil */
   font-weight: 800;
   color: #ffffff;
 }
@@ -56,10 +56,6 @@
 
 .btn-explore:hover {
   background-color: #d4a912;
-}
-
-.welcome-card h1 {
-  font-size: 2rem; /* movil */
 }
 
 @media (min-width: 768px) {
