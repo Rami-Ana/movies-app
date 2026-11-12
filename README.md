@@ -38,46 +38,85 @@ ng serve
 Link: `http://localhost:4200/`
 
 
-### Test
-
-```bash
-ng test
+## Git Workflow
+### Branches
 ```
+main
+└── develop
+    ├── feature/hu-1-1-welcome
+    ├── feature/hu-1-2-movies-list
+    ├── feature/hu-1-3-search
+    ├── feature/hu-1-4-filters
+    └── feature/hu-1-5-pagination
+```
+
 
 ## Architecture
 ```
-movies-app/
-├── src/
-│   ├── main.ts
-│   ├── index.html
-│   ├── styles.css
-│   └── app/
-│       ├── components/
-│       │   ├── movie-gallery/     
-│       │   ├── movie-card/     
-│       │   └── movie-detail/   
-│       ├── models/
-│       │   ├── movie-model.ts    
-│       │   ├── genre-model.ts
-│       │   ├── person-model.ts         //actores y directores
-│       │   ├── movie-detail-model.ts
-│       │   ├── credits-model.ts
-│       │   └── pagination-model.ts     //response
-│       ├── core/
-│       │   └── services.ts
-│       │        └── movie-service.ts
-│       ├── app.config.ts
-│       ├── app.css
-│       ├── app.html
-│       ├── app.routes.ts
-│       └── app.ts
-├── public/
-├── angular.json
-├── package.json
-├── package-lock.json
-├── README.md
-└── .gitignore
+src/app/
+│
+├── core/ → cosas que existen una sola vez (singleton)
+│   ├── services/
+│   │     └── movie-service.ts  (habla con TMDB)
+│   │ 
+│   ├── guards/
+│   ├── interceptors/
+│   └── constants/
+│
+├── shared/  → solo lo que usan 2+ 
+│   ├── components/
+│   ├── pipes/
+│   ├── directives/
+│   └── ui/
+│   
+├── models/ → Interfaces globales
+│   ├── movie-model.ts
+│   ├── movie-detail-model.ts //merece la pena??
+│   ├── genre-model.ts
+│   ├── person-model.ts
+│   ├── credits-model.ts
+│   └── pagination-model.ts
+│   
+├── features/
+│   │
+│   ├── home/
+│   │   └── pages/
+│   │       └── home-page
+│   │
+│   ├── movies/
+│   │   ├── pages/
+│   │   │   ├── movies-page
+│   │   │   └── movie-detail-page
+│   │   │    
+│   │   └── components/
+│   │        ├── movie-card
+│   │        ├── movie-gallery
+│   │        └── search-bar // Posibilidad de ponerlo en Shared
+│   │       
+│   ├── people/  →  actor y director
+│   │     ├── pages/
+│   │     └── components/
+│   │       
+|   ├── auth/
+│   │     ├── pages/
+│   │     ├── components/
+│   │     └── models/               (modelos exclusivos de auth)
+│   │          └── auth-model.ts
+│   │   
+│   ├── favorites/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── models/               (favorito + puntuación)
+│   │          └── fav-model.ts
+│   │
+│   ├── profile/
+│   │
+│   └── stats/
+│
+└── mocks/   → datos de prueba (temporal)
 ```
+
+
 
 
 ## Features
@@ -88,6 +127,12 @@ User authentication
 Favorites management
 Personal ratings
 
+
+### Test
+
+```bash
+ng test
+```
 
 ## Resources
 ### Trello
