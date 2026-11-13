@@ -27,7 +27,7 @@
 }
 
 .welcome-card h1 {
- font-size: 2rem; /* móvil */
+  font-size: 2rem; /* móvil */
   font-weight: 800;
   color: #ffffff;
 }
@@ -39,6 +39,10 @@
 }
 
 .btn-explore {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
   background-color: #f5c518;
   color: #000000;
   border: none;
