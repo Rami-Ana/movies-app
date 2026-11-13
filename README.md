@@ -67,8 +67,8 @@ src/app/
 │   ├── components/
 │   │      ├── header/
 │   │      └── footer/
-│   │ 
 │   ├── pipes/
+│   │      └── tmdb-image-pipe.ts
 │   ├── directives/
 │   └── ui/
 │   
@@ -115,8 +115,8 @@ src/app/
 │   │          └── auth-model.ts
 │   │
 │   └── stats/
-│
 └── mocks/   → datos de prueba (temporal)
+       └── movies-mock.ts
 ```
 
 
