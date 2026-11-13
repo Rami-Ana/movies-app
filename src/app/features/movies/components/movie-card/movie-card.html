@@ -1,0 +1,6 @@
+<article class="movie-card">
+  <img [src]="movieData().poster_path | tmdbImage" [alt]= "movieData().title" />
+  <h2> {{ movieData().title }} </h2>
+  <p> {{ movieData().release_date }}</p>
+  <p> {{ movieData().vote_average }}</p>
+</article>
