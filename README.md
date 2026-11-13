@@ -83,8 +83,8 @@ src/app/
 ├── features/
 │   │
 │   ├── home/
-│   │     └── pages/
-│   │           └── home-page
+│   │     └── home-page
+│   │          
 │   │
 │   ├── movies/
 │   │   ├── pages/
