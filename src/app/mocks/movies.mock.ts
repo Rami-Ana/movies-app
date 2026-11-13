@@ -348,4 +348,4 @@ const data = {
     "total_results": 20001
 };
 
-export const MOVIES_MOCK: ModelPaginationResponse = data;
+export const MOVIES_MOCK: ModelPaginationResponse = data; 
