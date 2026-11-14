@@ -5,8 +5,8 @@ import { moviesMock } from '../../mocks/movies-mock';
 
 @Service()
 export class MovieService {
-    //devuelve las pelis populares. Por ahora usa datos de prueba:
+    //devuelve las pelis populares. Por ahora usa datos de prueba.
     getPopularMovies(): Observable<ModelPaginationResponse> {
-        return of(moviesMock);
+        return of(moviesMock); // datos mock que mostrara
     }
 }
