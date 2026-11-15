@@ -8,5 +8,6 @@ export const genresMock: ModelGenreListResponse = {
     {id: 18, name: 'Drama',},
     {id: 878, name: 'Ciencia ficción',},
     {id: 27, name: 'Terror',},
+    {id: 999, name: 'Documental'},
   ],
 };
