@@ -2,6 +2,7 @@
 
 <select
   id="genre"
+  [value]="selectedGenre()" 
   (change)="onGenreChange($event)"
 >
   <option value="">Todos los géneros</option>
@@ -14,3 +15,10 @@
     
   }
 </select>
+
+<button
+  type="button"
+  (click)="clearGenreFilters()"
+>
+  Limpiar filtros
+</button>
