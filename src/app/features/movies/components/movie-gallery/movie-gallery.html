@@ -1,7 +1,11 @@
+
+<app-movie-filters></app-movie-filters>
+
 <section class="movie-gallery">
-<!-- repite una app movie card por cada pelicula de la lista results -->
-@for (m of movies()?.results ?? []; track m.id){ <!-- quiere decir si aun no hay datos, usa una lista vacía --> 
-<app-movie-card [movieData]="m" />
-}
+    
+    @for 
+        (m of movies()?.results ?? []; track m.id){ 
+            <app-movie-card [movieData]="m" />
+        }
 
 </section>

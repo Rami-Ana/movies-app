@@ -2,15 +2,17 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieService } from '../../../../core/services/movie-service';
+import { MovieFilters } from '../movie-filters/movie-filters';
 
 
 @Component({
-  imports: [MovieCard],
+  imports: [MovieCard, MovieFilters],
   selector: 'app-movie-gallery',
   styleUrl: './movie-gallery.css',
   templateUrl: './movie-gallery.html',
 })
 export class MovieGallery {
-    private movieService = inject(MovieService);
+  private movieService = inject(MovieService);
   movies = toSignal(this.movieService.getPopularMovies());
+
 }
