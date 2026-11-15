@@ -1,18 +1,16 @@
-<label for="genre">
-  Género
-</label>
+<label for="genre">Género: </label>
 
 <select
   id="genre"
   (change)="onGenreChange($event)"
 >
-  <option value="">
-    Todos los géneros
-  </option>
+  <option value="">Todos los géneros</option>
 
   @for (genre of genres(); track genre.id) {
+
     <option [value]="genre.id">
       {{ genre.name }}
     </option>
+    
   }
 </select>

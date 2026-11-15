@@ -32,9 +32,6 @@ export class MovieFilters {
       ? null
       : Number(value);
 
-    console.log('Género seleccionado:', genreId);
-
-
     this.genreChange.emit(genreId);
   }
 }

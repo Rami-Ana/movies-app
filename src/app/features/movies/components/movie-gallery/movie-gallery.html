@@ -1,11 +1,13 @@
-
-<app-movie-filters></app-movie-filters>
+<app-movie-filters 
+(genreChange)="onGenreChange($event)"
+></app-movie-filters>
 
 <section class="movie-gallery">
     
     @for 
-        (m of movies()?.results ?? []; track m.id){ 
-            <app-movie-card [movieData]="m" />
+    (m of filteredMovies(); track m.id) { 
+            <app-movie-card 
+            [movieData]="m" > </app-movie-card>
         }
 
 </section>
