@@ -1,4 +1,10 @@
-<form role="search" class="search-bar">
+<form role="search" class="search-bar" (submit)="$event.preventDefault()">
   <label for="search-input">Buscar películas</label>
-  <input id="search-input" type="search" name="q" placeholder="Buscar por título" />
+  <input #searchInput 
+  id="search-input" 
+  type="search" 
+  name="q" 
+  placeholder="Buscar por título"
+
+(input)="startSearch(searchInput.value)" /> <!--cada vez que cambie el texto dentro de caja se activa mi metodo -->
 </form>
