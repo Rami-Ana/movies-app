@@ -5,6 +5,7 @@ import { MovieService } from '../../../../core/services/movie-service';
 import { MovieFilters } from '../movie-filters/movie-filters';
 import { GenreService } from '../../../../core/services/genre-service';
 import { ModelGenre } from '../../../../models/genre-model';
+import { SortOrder } from '../../../../models/sort-order-model';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class MovieGallery {
   movies = toSignal(this.movieService.getPopularMovies());
 
   genres = signal<ModelGenre[]>([]);
+  sortOrder = signal<SortOrder>('popularity');
 
   selectedGenre = signal<number | null>(null);
   minimumVote = signal<number | null>(null);
@@ -39,6 +41,7 @@ export class MovieGallery {
 
     const genre = this.selectedGenre();
     const minimumVote = this.minimumVote();
+    const sortOrder = this.sortOrder();
 
     if (genre !== null) {
       filtered = filtered.filter(movie =>
@@ -52,7 +55,25 @@ export class MovieGallery {
       );
     }
 
-    return filtered;
+    switch (sortOrder) {
+      case 'popularity':
+        return [...filtered].sort(
+          (a, b) => b.popularity - a.popularity
+        );
+
+      case 'vote':
+        return [...filtered].sort(
+          (a, b) => b.vote_average - a.vote_average
+        );
+
+      case 'release':
+        return [...filtered].sort((a, b) => {
+          const dateA = a.release_date ? new Date(a.release_date).getTime() : 0;
+          const dateB = b.release_date ? new Date(b.release_date).getTime() : 0;
+
+          return dateB - dateA;
+        });
+    }
   });
 
   onGenreChange(genreId: number | null): void {
@@ -61,6 +82,10 @@ export class MovieGallery {
 
   onMinimumVoteChange(vote: number | null): void {
     this.minimumVote.set(vote);
+  }
+
+  onSortOrderChange(order: SortOrder): void {
+    this.sortOrder.set(order);
   }
 
 }

@@ -10,11 +10,13 @@
 <br>
 
 <app-movie-filters 
-[genres]="genres()"
-[selectedGenre]="selectedGenre()"
-[minimumVote]="minimumVote()"
-(genreChange)="onGenreChange($event)"
-(minimumVoteChange)="onMinimumVoteChange($event)"
+  [genres]="genres()"
+  [selectedGenre]="selectedGenre()"
+  [minimumVote]="minimumVote()"
+  [sortOrder]="sortOrder()"
+  (genreChange)="onGenreChange($event)"
+  (minimumVoteChange)="onMinimumVoteChange($event)"
+  (sortOrderChange)="onSortOrderChange($event)"
 ></app-movie-filters>
 
 <section class="movie-gallery">

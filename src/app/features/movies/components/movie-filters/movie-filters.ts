@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ModelGenre } from '../../../../models/genre-model';
+import { SortOrder } from '../../../../models/sort-order-model';
 
 @Component({
   imports: [],
@@ -16,6 +17,9 @@ export class MovieFilters {
 
   minimumVote = input<number | null>(null);
   minimumVoteChange = output<number | null>();
+
+  sortOrder = input<SortOrder>('popularity');
+  sortOrderChange = output<SortOrder>();
 
   onGenreChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
@@ -50,8 +54,16 @@ export class MovieFilters {
     this.minimumVoteChange.emit(vote);
   }
 
+  onSortOrderChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const value = select.value as SortOrder;
+
+    this.sortOrderChange.emit(value);
+  }
+
   clearFilters(): void {
     this.genreChange.emit(null);
     this.minimumVoteChange.emit(null);
+    this.sortOrderChange.emit('popularity');
   }
 }
