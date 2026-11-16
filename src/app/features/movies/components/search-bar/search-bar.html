@@ -5,6 +5,8 @@
   type="search" 
   name="q" 
   placeholder="Buscar por título"
+  aria-describedby="search-help"
 
 (input)="startSearch(searchInput.value)" /> <!--cada vez que cambie el texto dentro de caja se activa mi metodo -->
+<p id="search-help" class="search-bar-help">Escribe al menos 2 letras para buscar.</p>
 </form>
