@@ -1,0 +1,14 @@
+.search-bar {
+  padding: 1rem;
+  background-color: #121212;
+}
+
+.search-bar label {
+  color: #ffffff;
+}
+
+.search-bar input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+}
