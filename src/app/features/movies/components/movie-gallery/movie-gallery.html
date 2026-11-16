@@ -1,6 +1,6 @@
 <section class="movie-gallery">
     <!-- repite una app movie card por cada pelicula de la lista results -->
-    @for (m of movies()?.results ?? []; track m.id){ <!-- quiere decir si aun no hay datos, usa una lista vacía -->
+    @for (m of movies(); track m.id){ 
     <app-movie-card [movieData]="m" />
     } @empty {
     <p class="movie-gallery-error"> No hay películas para mostrar. </p>
