@@ -11,6 +11,6 @@ import { MovieService } from '../../../../core/services/movie-service';
   templateUrl: './movie-gallery.html',
 })
 export class MovieGallery {
-    private movieService = inject(MovieService);
+  private movieService = inject(MovieService);
   movies = toSignal(this.movieService.getPopularMovies());
 }
