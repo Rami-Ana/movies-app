@@ -1,24 +1,25 @@
 <label for="genre">Género: </label>
 
-<select
-  id="genre"
-  [value]="selectedGenre()" 
-  (change)="onGenreChange($event)"
+<select id="genre" 
+[value]="selectedGenre()" 
+(change)="onGenreChange($event)"
 >
-  <option value="">Todos los géneros</option>
+  <option value="" 
+  [selected]="selectedGenre() === null"
+  >Todos los géneros</option>
 
   @for (genre of genres(); track genre.id) {
 
-    <option [value]="genre.id">
-      {{ genre.name }}
-    </option>
-    
+  <option 
+  [value]="genre.id" 
+  [selected]="selectedGenre() === genre.id"
+  >
+    {{ genre.name }}
+  </option>
+
   }
 </select>
 
-<button
-  type="button"
-  (click)="clearGenreFilters()"
->
+<button type="button" (click)="clearGenreFilters()">
   Limpiar filtros
 </button>

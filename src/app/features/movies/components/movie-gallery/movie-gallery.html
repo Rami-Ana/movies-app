@@ -10,6 +10,7 @@
 <br>
 
 <app-movie-filters 
+[selectedGenre]="selectedGenre()"
 (genreChange)="onGenreChange($event)"
 ></app-movie-filters>
 
