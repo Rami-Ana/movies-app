@@ -22,6 +22,7 @@ export class MovieGallery {
   genres = signal<ModelGenre[]>([]);
 
   selectedGenre = signal<number | null>(null);
+  minimumVote = signal<number | null>(null);
 
   constructor() { this.loadGenres(); }
 
@@ -34,17 +35,32 @@ export class MovieGallery {
   }
 
   filteredMovies = computed(() => {
-    const movies = this.movies()?.results ?? [];
+    let filtered = this.movies()?.results ?? [];
+
     const genre = this.selectedGenre();
+    const minimumVote = this.minimumVote();
 
-    if (genre === null) {return movies}
+    if (genre !== null) {
+      filtered = filtered.filter(movie =>
+        movie.genre_ids.includes(genre)
+      );
+    }
 
-    return movies.filter(movie =>
-      movie.genre_ids.includes(genre)
-    );
+    if (minimumVote !== null) {
+      filtered = filtered.filter(movie =>
+        Math.round(movie.vote_average * 10) / 10 >= minimumVote
+      );
+    }
+
+    return filtered;
   });
 
   onGenreChange(genreId: number | null): void {
     this.selectedGenre.set(genreId);
   }
+
+  onMinimumVoteChange(vote: number | null): void {
+    this.minimumVote.set(vote);
+  }
+
 }
