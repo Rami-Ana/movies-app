@@ -1,10 +1,11 @@
 <label for="genre">Género: </label>
 
-<select id="genre" 
-[value]="selectedGenre()" 
+<select 
+id="genre" 
 (change)="onGenreChange($event)"
 >
-  <option value="" 
+  <option 
+  value="" 
   [selected]="selectedGenre() === null"
   >Todos los géneros</option>
 

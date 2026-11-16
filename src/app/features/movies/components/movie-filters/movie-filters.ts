@@ -1,5 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
-import { GenreService } from '../../../../core/services/genre-service';
+import { Component, input, output } from '@angular/core';
 import { ModelGenre } from '../../../../models/genre-model';
 
 @Component({
@@ -10,25 +9,11 @@ import { ModelGenre } from '../../../../models/genre-model';
 })
 export class MovieFilters {
 
-  private genreService = inject(GenreService);
+  genres = input<ModelGenre[]>([]);
 
-  genres = signal<ModelGenre[]>([]);
-    // Recibe el estado desde el padre
   selectedGenre = input<number | null>(null);
 
-  // Emite cambios al padre
   genreChange = output<number | null>();
-  
-
-  constructor() {this.loadGenres();}
-
-  private loadGenres(): void {
-    this.genreService.getGenres().subscribe({
-      next: (response) => {
-        this.genres.set(response.genres);
-      },
-    });
-  }
 
   onGenreChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
@@ -41,9 +26,6 @@ export class MovieFilters {
     this.genreChange.emit(genreId);
   }
 
-  clearGenreFilters(): void {
+  clearGenreFilters(): void {this.genreChange.emit(null);}
 
-    // Avisa al padre para quitar el filtro
-    this.genreChange.emit(null);
-  }
 }
