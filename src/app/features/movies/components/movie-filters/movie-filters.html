@@ -1,0 +1,36 @@
+<label for="genre">Género: </label>
+
+<select id="genre" (change)="onGenreChange($event)">
+  <option value="" [selected]="selectedGenre() === null">Todos los géneros</option>
+
+  @for (genre of genres(); track genre.id) {
+
+  <option [value]="genre.id" [selected]="selectedGenre() === genre.id">
+    {{ genre.name }}
+  </option>
+
+  }
+</select>
+
+<label for="sort-order">Ordenar por:</label>
+
+<select id="sort-order" (change)="onSortOrderChange($event)">
+  <option value="popularity" [selected]="sortOrder() === 'popularity'">
+    Popularidad
+  </option>
+  <option value="vote" [selected]="sortOrder() === 'vote'">
+    Nota
+  </option>
+  <option value="release" [selected]="sortOrder() === 'release'">
+    Fecha
+  </option>
+</select>
+
+<button type="button" (click)="clearFilters()">
+  Limpiar filtros
+</button>
+
+<label for="minimum-vote">Nota mínima:</label>
+
+<input id="minimum-vote" type="number" min="0" max="10" step="0.1" [value]="minimumVote() ?? ''"
+  (input)="onMinimumVoteChange($event)">

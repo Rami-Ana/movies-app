@@ -1,0 +1,19 @@
+.movie-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #121212;
+}
+
+.movie-gallery-error {
+  text-align: center;
+  color: #9ca3af;
+}
+
+@media (min-width: 768px) {
+  /*Sucede primero para el movil (briefing)*/
+  .movie-gallery {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

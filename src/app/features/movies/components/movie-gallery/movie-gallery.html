@@ -1,0 +1,33 @@
+<div aria-live="polite">
+	@if (filteredMovies().length === 0) {
+    No se encontraron resultados.
+  } @else if (filteredMovies().length === 1) {
+    1 resultado encontrado.
+  }@else {
+	{{ filteredMovies().length }} resultados encontrados.
+	}
+</div>
+<br>
+
+<app-movie-filters 
+  [genres]="genres()"
+  [selectedGenre]="selectedGenre()"
+  [minimumVote]="minimumVote()"
+  [sortOrder]="sortOrder()"
+  (genreChange)="onGenreChange($event)"
+  (minimumVoteChange)="onMinimumVoteChange($event)"
+  (sortOrderChange)="onSortOrderChange($event)"
+></app-movie-filters>
+
+<section class="movie-gallery">
+    
+    @for 
+    (m of filteredMovies(); track m.id) { 
+            <app-movie-card 
+            [movieData]="m" > </app-movie-card>
+        } @empty {
+    <p class="movie-gallery-error"> No hay películas para mostrar. </p>
+    }
+
+</section>
+
