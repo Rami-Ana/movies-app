@@ -43,11 +43,14 @@ Link: `http://localhost:4200/`
 ```
 main
 └── develop
-    ├── feature/hu-1-1-welcome
+    ├── feature/setup
+    ├── feature/welcome
+    ├── feature/home-explore-link
     ├── feature/hu-1-2-movies-list
     ├── feature/hu-1-3-search
     ├── feature/hu-1-4-filters
-    └── feature/hu-1-5-pagination
+    ├── feature/search-filter-integration
+    ├── 
     └── feature/hu-1-6-api-connexion
 ```
 
