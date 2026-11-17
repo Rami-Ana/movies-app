@@ -18,13 +18,15 @@ import { ModelMovie } from '../../../../models/movie-model';
   templateUrl: './movie-gallery.html',
 })
 export class MovieGallery {
+  //1. Atributos: private movieservice...
+  //2. constructor
   private movieService = inject(MovieService);
   private genreService = inject(GenreService);
   private route = inject(ActivatedRoute);
 
   movies = toSignal(this.movieService.getPopularMovies());
 
-  // movies = signal<ModelMovie[]>([]); //Eve
+  moviesSearch = signal<ModelMovie[]>([]); //Eve
   query = signal(''); //comprobar qué es
 
   genres = signal<ModelGenre[]>([]);
@@ -35,28 +37,29 @@ export class MovieGallery {
 
   constructor() {
     this.loadGenres();
-    
-    this.route.queryParamMap.subscribe((params) => {
-    this.query.set((params.get('q') ?? '').trim());
-    this.loadMovies();
-    }
 
-  private loadGenres(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      this.query.set((params.get('q') ?? '').trim());
+      this.loadMovies();
+    })
+  }
+
+    private loadGenres(): void {
     this.genreService.getGenres().subscribe({
       next: (response) => {
         this.genres.set(response.genres);
       },
     });
   }
- 
- private loadMovies() {
+
+  private loadMovies() {
     const request =
       this.query().length < 2
         ? this.movieService.getPopularMovies()
         : this.movieService.searchMovies(this.query());
 
     // Cuando lleguen las películas, guardalas para que el HTML las muestre
-    request.subscribe((response) => this.movies.set(response.results));
+    request.subscribe((response) => this.moviesSearch.set(response.results));
   }
 
   filteredMovies = computed(() => {
