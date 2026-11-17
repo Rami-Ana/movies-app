@@ -25,7 +25,9 @@
     (m of filteredMovies(); track m.id) { 
             <app-movie-card 
             [movieData]="m" > </app-movie-card>
-        }
+        } @empty {
+    <p class="movie-gallery-error"> No hay películas para mostrar. </p>
+    }
 
 </section>
 

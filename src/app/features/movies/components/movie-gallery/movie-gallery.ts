@@ -6,6 +6,9 @@ import { MovieFilters } from '../movie-filters/movie-filters';
 import { GenreService } from '../../../../core/services/genre-service';
 import { ModelGenre } from '../../../../models/genre-model';
 import { SortOrder } from '../../../../models/sort-order-model';
+import { ActivatedRoute } from '@angular/router';
+import { ModelMovie } from '../../../../models/movie-model';
+
 
 
 @Component({
@@ -17,8 +20,12 @@ import { SortOrder } from '../../../../models/sort-order-model';
 export class MovieGallery {
   private movieService = inject(MovieService);
   private genreService = inject(GenreService);
+  private route = inject(ActivatedRoute);
 
   movies = toSignal(this.movieService.getPopularMovies());
+
+  // movies = signal<ModelMovie[]>([]); //Eve
+  query = signal(''); //comprobar qué es
 
   genres = signal<ModelGenre[]>([]);
   sortOrder = signal<SortOrder>('popularity');
@@ -26,7 +33,13 @@ export class MovieGallery {
   selectedGenre = signal<number | null>(null);
   minimumVote = signal<number | null>(null);
 
-  constructor() { this.loadGenres(); }
+  constructor() {
+    this.loadGenres();
+    
+    this.route.queryParamMap.subscribe((params) => {
+    this.query.set((params.get('q') ?? '').trim());
+    this.loadMovies();
+    }
 
   private loadGenres(): void {
     this.genreService.getGenres().subscribe({
@@ -34,6 +47,16 @@ export class MovieGallery {
         this.genres.set(response.genres);
       },
     });
+  }
+ 
+ private loadMovies() {
+    const request =
+      this.query().length < 2
+        ? this.movieService.getPopularMovies()
+        : this.movieService.searchMovies(this.query());
+
+    // Cuando lleguen las películas, guardalas para que el HTML las muestre
+    request.subscribe((response) => this.movies.set(response.results));
   }
 
   filteredMovies = computed(() => {
