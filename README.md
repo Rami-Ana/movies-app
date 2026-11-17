@@ -94,8 +94,8 @@ src/app/
 │   │   └── components/
 │   │        ├── movie-card
 │   │        ├── movie-gallery
-│   │        └── search-bar // Posibilidad de ponerlo en Shared
-│   │
+│   │        └── search-bar -(( por el momento colocado aqui?))
+│   │                        
 │   ├── favorites/
 │   │     ├── pages/
 │   │     ├── components/
