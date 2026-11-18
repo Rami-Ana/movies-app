@@ -38,6 +38,14 @@ ng serve
 Link: `http://localhost:4200/`
 
 
+## Environment setup
+The TMDB API key is not stored in the repository.
+1. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and `src/environments/environment.development.ts`.
+2. Replace `YOUR_API_KEY_HERE` with your own TMDB API key.
+
+## Git Workflow
+
+
 ## Git Workflow
 ### Branches
 ```
@@ -124,8 +132,9 @@ src/app/
 │       └── movies-mock.ts
 │
 └── environments/  → Configuración de entornos y claves de API
-    ├── environment.ts
-    └── environment.development.ts
+    ├── environment.ts (no se sube, tiene la clave real)
+    └── environment.development.ts (no se sube, tiene la clave real)
+    └── environment.example.ts (se sube, con una clave falsa)
 
 
 
