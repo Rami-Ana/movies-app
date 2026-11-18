@@ -1,28 +1,54 @@
-<form [formGroup]="registerForm">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
     <label for="email">Correo electrónico: </label>
 
-    <input id="email" type="email" formControlName="email" placeholder="ejemplo@correo.com"><br>
+    <input id="email" type="email" formControlName="email" placeholder="ejemplo@correo.com">
+
+
+    @if (submitted && registerForm.controls.email.hasError('required')) {
+    <p>Email obligatorio</p>
+    }
+
+    @if (submitted && registerForm.controls.email.hasError('email')) {
+    <p>Email no válido</p>
+    }
+    <br>
 
     <label for="password">Contraseña: </label>
 
     <input id="password" type="password" formControlName="password" placeholder="Mínimo 8 caracteres"
-        autocomplete="new-password"><br>
+        autocomplete="new-password">
+
+
+    @if (submitted && registerForm.controls.password.hasError('required')){
+    <p>La contraseña es obligatoria</p>
+    }
+
+    @if (submitted && registerForm.controls.password.hasError('minlength')){
+    <p>Mínimo 8 caracteres</p>
+    }
+    <br>
 
     <label for="repeatPassword">Repetir contraseña: </label>
 
     <input id="repeatPassword" type="password" formControlName="repeatPassword" placeholder="Repite la contraseña"
-        autocomplete="new-password"><br>
+        autocomplete="new-password">
+
+
+    @if (submitted && registerForm.controls.repeatPassword.hasError('required')) {
+    <p>Debes repetir la contraseña</p>
+    }
+
+    @if (
+
+    registerForm.hasError('passwordsMismatch') &&
+    submitted) {
+    <p>Las contraseñas no coinciden</p>
+    }
+    <br>
 
     <button type="submit">Registrarse</button>
 
     <hr>
-    
-    @if (
-    registerForm.hasError('passwordsMismatch') &&
-    registerForm.controls.repeatPassword.touched
-    ) {
-    <p>Las contraseñas no coinciden</p>
-    }
 
 </form>

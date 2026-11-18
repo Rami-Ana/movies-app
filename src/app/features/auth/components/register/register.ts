@@ -1,15 +1,31 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
+function passwordsMatchValidator(
+  control: AbstractControl,
+): ValidationErrors | null {
+
+  const password = control.get('password')?.value;
+  const repeatPassword = control.get('repeatPassword')?.value;
+
+  if (!password || !repeatPassword) { return null; }
+  if (password !== repeatPassword) {
+    return { passwordsMismatch: true, };
+  }
+  return null;
+}
+
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-register',
   styleUrl: './register.css',
   templateUrl: './register.html',
 })
+
 export class Register {
   // Inyección de dependencias
   private registerFormBuilder = inject(FormBuilder);
+    submitted = false;
 
   // Formulario reactivo
   registerForm = this.registerFormBuilder.group({
@@ -21,22 +37,17 @@ export class Register {
   },
     { validators: passwordsMatchValidator, }
   );
-}
 
 
-function passwordsMatchValidator(
-  control: AbstractControl,
-): ValidationErrors | null {
+  onSubmit(): void {
 
-  const password = control.get('password')?.value;
+    this.submitted = true;
 
-  const repeatPassword = control.get('repeatPassword')?.value;
+    if (this.registerForm.invalid) { return; }
+    // this.registerForm.reset();// Registro correcto
 
-  if (password !== repeatPassword) {
-    return {
-      passwordsMismatch: true,
-    };
+    // Aquí irá Firebase más adelante:
+    // this.authService.register(...)
   }
 
-  return null;
 }
