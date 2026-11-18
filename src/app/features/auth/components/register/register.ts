@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -9,15 +9,34 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class Register {
   // Inyección de dependencias
-  private registerFormBuilder  = inject(FormBuilder);
+  private registerFormBuilder = inject(FormBuilder);
 
   // Formulario reactivo
+  registerForm = this.registerFormBuilder.group({
+    email: ['', [Validators.required, Validators.email],
+    ],
+    password: ['', [Validators.required, Validators.minLength(8)]
+    ],
+    repeatPassword: ['', Validators.required]
+  },
+    { validators: passwordsMatchValidator, }
+  );
+}
 
-registerForm = this.registerFormBuilder.group({
-  email: ['', [Validators.required, Validators.email],
-],
-  password: ['', [Validators.required,Validators.minLength(8)]
-],
-  repeatPassword: ['', Validators.required]
-});
+
+function passwordsMatchValidator(
+  control: AbstractControl,
+): ValidationErrors | null {
+
+  const password = control.get('password')?.value;
+
+  const repeatPassword = control.get('repeatPassword')?.value;
+
+  if (password !== repeatPassword) {
+    return {
+      passwordsMismatch: true,
+    };
+  }
+
+  return null;
 }
