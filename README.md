@@ -38,16 +38,28 @@ ng serve
 Link: `http://localhost:4200/`
 
 
+## Environment setup
+The TMDB API key is not stored in the repository.
+1. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and `src/environments/environment.development.ts`.
+2. Replace `YOUR_API_KEY_HERE` with your own TMDB API key.
+
+## Git Workflow
+
+
 ## Git Workflow
 ### Branches
 ```
 main
 └── develop
-    ├── feature/hu-1-1-welcome
+    ├── feature/setup
+    ├── feature/welcome
+    ├── feature/home-explore-link
     ├── feature/hu-1-2-movies-list
     ├── feature/hu-1-3-search
     ├── feature/hu-1-4-filters
-    └── feature/hu-1-5-pagination
+    ├── feature/search-filter-integration
+    ├── 
+    └── feature/hu-1-6-api-connexion
 ```
 
 
@@ -94,7 +106,8 @@ src/app/
 │   │   └── components/
 │   │        ├── movie-card
 │   │        ├── movie-gallery
-│   │        └── search-bar -(( por el momento colocado aqui?))
+│   │        └── search-bar -> ( por el momento colocado aqui? )
+│   │        └── movie-filters
 │   │                        
 │   ├── favorites/
 │   │     ├── pages/
@@ -116,7 +129,15 @@ src/app/
 │   │
 │   └── stats/
 └── mocks/   → datos de prueba (temporal)
-       └── movies-mock.ts
+│       └── movies-mock.ts
+│
+└── environments/  → Configuración de entornos y claves de API
+    ├── environment.ts (no se sube, tiene la clave real)
+    └── environment.development.ts (no se sube, tiene la clave real)
+    └── environment.example.ts (se sube, con una clave falsa)
+
+
+
 ```
 
 
