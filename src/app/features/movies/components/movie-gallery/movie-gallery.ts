@@ -60,11 +60,11 @@ export class MovieGallery {
         : this.movieService.searchMovies(this.query());
 
 
-    this.moviesRequest = request.subscribe({  
+    this.moviesRequest = request.subscribe({
       next: (response) => {
         this.movies.set(response.results);
         this.loading.set(false);
-      },                                       
+      },
       error: () => {
         this.movies.set([]);
         this.error.set(true);
