@@ -20,9 +20,8 @@ export class MovieGallery {
   private genreService = inject(GenreService);
   private route = inject(ActivatedRoute);
 
-  movies = toSignal(this.movieService.getPopularMovies());
+  movies = signal<ModelMovie[]>([]);
 
-  moviesSearch = signal<ModelMovie[]>([]);
   query = signal('');
 
   genres = signal<ModelGenre[]>([]);
@@ -55,17 +54,12 @@ export class MovieGallery {
         : this.movieService.searchMovies(this.query());
 
     request.subscribe((response) => {
-      console.log('RESULTADOS', response.results);
-      this.moviesSearch.set(response.results);
+      this.movies.set(response.results);
     });
   }
 
   filteredMovies = computed(() => {
-    let filtered =
-      this.query().length >= 2
-        ? this.moviesSearch()
-        : this.movies()?.results ?? [];
-
+    let filtered = this.movies();
     const genre = this.selectedGenre();
     const minimumVote = this.minimumVote();
     const sortOrder = this.sortOrder();
