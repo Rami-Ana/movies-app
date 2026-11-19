@@ -58,8 +58,10 @@ main
     ├── feature/hu-1-3-search
     ├── feature/hu-1-4-filters
     ├── feature/search-filter-integration
-    ├── 
-    └── feature/hu-1-6-api-connexion
+    ├── fix/search-filters-integration
+    ├── refactor/movie-gallery-state
+    ├── feature/hu-1-6-api-connexion
+    └── feature/hu-2-1-detail-routes
 ```
 
 
@@ -70,7 +72,6 @@ src/app/
 ├── core/ → cosas que existen una sola vez (singleton)
 │   ├── services/
 │   │     └── movie-service.ts  (habla con TMDB)
-│   │ 
 │   ├── guards/
 │   ├── interceptors/
 │   └── constants/
@@ -83,7 +84,7 @@ src/app/
 │   │      └── tmdb-image-pipe.ts
 │   ├── directives/
 │   └── ui/
-│   
+│
 ├── models/ → Interfaces globales
 │   ├── movie-model.ts
 │   ├── movie-detail-model.ts //merece la pena??
@@ -91,24 +92,27 @@ src/app/
 │   ├── person-model.ts
 │   ├── credits-model.ts
 │   └── pagination-model.ts
-│   
-├── features/
+│
+├── features/  → una carpeta por funcionalidad; las páginas van sueltas dentro de su feature
 │   │
 │   ├── home/
 │   │     └── home-page
-│   │          
 │   │
 │   ├── movies/
-│   │   ├── pages/
-│   │   │   ├── movies-page
-│   │   │   └── movie-detail-page
-│   │   │    
+│   │   ├── movies-page
+│   │   ├── movie-detail-page
 │   │   └── components/
 │   │        ├── movie-card
 │   │        ├── movie-gallery
-│   │        └── search-bar -> ( por el momento colocado aqui? )
-│   │        └── movie-filters
-│   │                        
+│   │        ├── movie-filters
+│   │        └── search-bar
+│   │
+│   ├── people/  →  actor y director
+│   │     └── person-detail-page
+│   │
+│   ├── not-found/
+│   │     └── not-found-page
+│   │
 │   ├── favorites/
 │   │     ├── pages/
 │   │     ├── components/
@@ -116,31 +120,23 @@ src/app/
 │   │           └── fav-model.ts
 │   │
 │   ├── profile/
-│   │       
-│   ├── people/  →  actor y director
-│   │     ├── pages/
-│   │     └── components/
-│   │       
-|   ├── auth/
+│   │
+│   ├── auth/
 │   │     ├── pages/
 │   │     ├── components/
 │   │     └── models/               (modelos exclusivos de auth)
 │   │          └── auth-model.ts
 │   │
 │   └── stats/
-└── mocks/   → datos de prueba (temporal)
-│       └── movies-mock.ts
 │
-└── environments/  → Configuración de entornos y claves de API
-    ├── environment.ts (no se sube, tiene la clave real)
-    └── environment.development.ts (no se sube, tiene la clave real)
-    └── environment.example.ts (se sube, con una clave falsa)
-
-
-
+├── mocks/   → datos de prueba (temporal)
+│   └── movies-mock.ts
+│
+└── environments/  → configuración de entornos y claves de API
+    ├── environment.ts              (no se sube, tiene la clave real)
+    ├── environment.development.ts  (no se sube, tiene la clave real)
+    └── environment.example.ts      (se sube, con una clave falsa)
 ```
-
-
 
 
 ## Features
