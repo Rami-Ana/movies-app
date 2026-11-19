@@ -31,8 +31,7 @@ export class MovieGallery {
   // Datos y estado de la carga:
   movies = signal<ModelMovie[]>([]);
   query = signal('');
-  loading = signal(true);
-  error = signal(false);
+  status = signal<'loading' | 'error' | 'succes'>('loading');
 
   // Guarda la petición en curso para poder cancelarla si llega otra
   private moviesRequest?: Subscription;
@@ -51,8 +50,7 @@ export class MovieGallery {
   private loadMovies(): void {
     this.moviesRequest?.unsubscribe(); // cancela la petición  si sigue en curso
 
-    this.loading.set(true);
-    this.error.set(false);
+   this.status.set('loading');
 
     const request =
       this.query().length < 2
@@ -63,12 +61,11 @@ export class MovieGallery {
     this.moviesRequest = request.subscribe({
       next: (response) => {
         this.movies.set(response.results);
-        this.loading.set(false);
+        this.status.set('succes');
       },
       error: () => {
         this.movies.set([]);
-        this.error.set(true);
-        this.loading.set(false);
+        this.status.set('error');
       },
     });
   }
