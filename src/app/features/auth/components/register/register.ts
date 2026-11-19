@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 function passwordsMatchValidator(
@@ -25,7 +25,13 @@ function passwordsMatchValidator(
 export class Register {
   // Inyección de dependencias
   private registerFormBuilder = inject(FormBuilder);
-    submitted = false;
+
+  //¿El usuario ha intentado enviar el formulario?
+  submitted = false;
+
+  // ¿Estamos esperando una respuesta de Firebase?
+  submitting = signal(false);
+
 
   // Formulario reactivo
   registerForm = this.registerFormBuilder.group({
@@ -40,14 +46,40 @@ export class Register {
 
 
   onSubmit(): void {
+    // Guarda defensiva
+    if (this.submitting()) {return;}
 
     this.submitted = true;
 
     if (this.registerForm.invalid) { return; }
+
+    this.submitting.set(true);
+
+    // Simulación temporal
+    setTimeout(() => {
+      this.submitting.set(false);
+      console.log('Formulario válido');
+    }, 2000);
+  }
+
+    // this.submitting.set(true);
+
+    // try {
+
+    //   await this.authService.register(
+    //     email,
+    //     password
+    //   );
+
+    // } finally {
+    //   this.submitting.set(false);
+    // }
+
+
+    //------------------------------------
     // this.registerForm.reset();// Registro correcto
 
     // Aquí irá Firebase más adelante:
     // this.authService.register(...)
-  }
 
 }
