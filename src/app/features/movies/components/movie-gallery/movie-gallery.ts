@@ -1,13 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MovieCard } from '../movie-card/movie-card';
-import { MovieService } from '../../../../core/services/movie-service';
 import { MovieFilters } from '../movie-filters/movie-filters';
-import { GenreService } from '../../../../core/services/genre-service';
 import { ModelGenre } from '../../../../models/genre-model';
 import { SortOrder } from '../../../../models/sort-order-model';
 import { ActivatedRoute } from '@angular/router';
 import { ModelMovie } from '../../../../models/movie-model';
 import { Subscription } from 'rxjs';
+import { MovieService } from '../../../../core/services/movie-service';
+import { GenreService } from '../../../../core/services/genre-service';
 
 @Component({
   imports: [MovieCard, MovieFilters],
