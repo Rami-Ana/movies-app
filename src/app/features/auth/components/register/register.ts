@@ -1,5 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth-service';
+import { FirebaseError } from 'firebase/app';
+
+import authErrors from '../../../../core/data/auth-errors.json';
 
 function passwordsMatchValidator(
   control: AbstractControl,
@@ -14,7 +19,6 @@ function passwordsMatchValidator(
   }
   return null;
 }
-
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-register',
@@ -22,15 +26,19 @@ function passwordsMatchValidator(
   templateUrl: './register.html',
 })
 
-export class Register {
-  // Inyección de dependencias
+
+export class Register {// REGISTER: Estado de la pantalla
+  // Contiene: submitted, submitting, errorMessage y registerForm
+
   private registerFormBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  //¿El usuario ha intentado enviar el formulario?
-  submitted = false;
+  submitted = false;//¿El usuario ha intentado enviar el formulario?
 
-  // ¿Estamos esperando una respuesta de Firebase?
-  submitting = signal(false);
+
+  submitting = signal(false);// ¿Estamos esperando una respuesta de Firebase?
+  errorMessage = signal(''); //si falla firebase
 
 
   // Formulario reactivo
@@ -45,41 +53,48 @@ export class Register {
   );
 
 
-  onSubmit(): void {
-    // Guarda defensiva
-    if (this.submitting()) {return;}
+  async onSubmit(): Promise<void> {// ¿Qué ocurre al pulsar Registrar? Gestion pantalla
 
+    // Evita envíos duplicados mientras Firebase responde
+    if (this.submitting()) { return; }
+
+    // Activa la visualización de errores del formulario
     this.submitted = true;
 
+     // Detiene el proceso si el formulario no es válido
     if (this.registerForm.invalid) { return; }
 
+    // Limpia errores anteriores y activa el estado de carga
+    this.errorMessage.set(''); //error firebase
     this.submitting.set(true);
 
-    // Simulación temporal
-    setTimeout(() => {
+    // Obtiene los datos necesarios para el registro
+    const { email, password } = this.registerForm.getRawValue();
+
+    try {
+      // Crea el usuario en Firebase
+      await this.authService.register(email!, password!);
+
+      // Limpia el formulario tras un registro correcto
+      this.registerForm.reset();
+      this.submitted = false;
+
+      // Redirige al catálogo de películas
+      await this.router.navigate(['/movies']);
+    } catch (error) {
+  const messages: Record<string, string> = authErrors;
+
+  const code =
+    error instanceof FirebaseError
+      ? error.code
+      : 'default';
+
+  this.errorMessage.set(
+    messages[code] ?? messages['default']
+  );
+} finally {
+      // Reactiva el botón independientemente del resultado
       this.submitting.set(false);
-      console.log('Formulario válido');
-    }, 2000);
+    }
   }
-
-    // this.submitting.set(true);
-
-    // try {
-
-    //   await this.authService.register(
-    //     email,
-    //     password
-    //   );
-
-    // } finally {
-    //   this.submitting.set(false);
-    // }
-
-
-    //------------------------------------
-    // this.registerForm.reset();// Registro correcto
-
-    // Aquí irá Firebase más adelante:
-    // this.authService.register(...)
-
 }

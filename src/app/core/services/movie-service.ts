@@ -1,31 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ModelPaginationResponse } from '../../models/pagination-model';
-import { environment } from '../../../environments/environment';
+import { moviesMock } from '../../mocks/movies-mock';
 
 @Service()
 export class MovieService {
-
-private http = inject(HttpClient)
-    
-    //Traigo peliculas populares, con mi clave.
-    getPopularMovies(page = 1): Observable<ModelPaginationResponse> {
-        return this.http.get<ModelPaginationResponse>(`${environment.baseUrl}/movie/popular`, {
-            params: {
-                api_key: environment.tmdbApiKey,
-                page,
-            }
-        });
+    //devuelve pelis populares. Por ahora usa datos de prueba.
+    getPopularMovies(): Observable<ModelPaginationResponse> {
+        return of(moviesMock); // 
     }
 
-    //busqueda real de peliculas en API
-    searchMovies(textQuery: string): Observable<ModelPaginationResponse> {
-        return this.http.get<ModelPaginationResponse>(`${environment.baseUrl}/search/movie`, {
-            params: {
-                api_key: environment.tmdbApiKey,
-                query: textQuery, // La palabra que escribio el usuario
-            }
-        });
+    // Busca películas por título dentro de los datos de prueba
+    searchMovies(query: string): Observable<ModelPaginationResponse> {
+    // Filtra la lista y guarda solo las películas cuyo título contiene lo que escribio el usuario    
+        const filteredMovies = moviesMock.results.filter((movie) =>
+            movie.title.toLowerCase().includes(query.toLowerCase()))
+
+    // Devuelve el mismo formato de respuesta,solo con las películas filtradas    
+        return of({ ...moviesMock, results: filteredMovies })
+
     }
 }
