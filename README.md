@@ -61,93 +61,91 @@ main
     ├── fix/search-filters-integration
     ├── refactor/movie-gallery-state
     ├── feature/hu-1-6-api-connexion
-    └── feature/hu-2-1-detail-routes
+    ├── feature/hu-2-1-detail-routes
+    └── feature/hu-2-2-detail-service
 ```
-
 
 ## Architecture
+```text
+src/
+├── app/
+│   ├── core/                → cosas que existen una sola vez (singleton)
+│   │   ├── services/
+│   │   │     └── movie-service.ts   (habla con TMDB: listado, detalle, créditos y persona)
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   └── constants/
+│   │
+│   ├── shared/              → solo lo que usan 2+ funcionalidades
+│   │   ├── components/
+│   │   │      ├── header/
+│   │   │      └── footer/
+│   │   ├── pipes/
+│   │   │      └── tmdb-image-pipe.ts
+│   │   ├── directives/
+│   │   └── ui/
+│   │
+│   ├── models/              → interfaces globales
+│   │   ├── movie-model.ts
+│   │   ├── movie-detail-model.ts
+│   │   ├── credits-model.ts
+│   │   ├── person-model.ts
+│   │   ├── genre-model.ts
+│   │   └── pagination-model.ts
+│   │
+│   ├── features/            → una carpeta por funcionalidad; las páginas van dentro de su feature
+│   │   ├── home/
+│   │   │     └── home-page
+│   │   │
+│   │   ├── movies/
+│   │   │   ├── movies-page
+│   │   │   ├── movie-detail-page
+│   │   │   └── components/
+│   │   │        ├── movie-card
+│   │   │        ├── movie-gallery
+│   │   │        ├── movie-filters
+│   │   │        └── search-bar
+│   │   │
+│   │   ├── people/            → actor y director
+│   │   │     └── person-detail-page
+│   │   │
+│   │   ├── not-found/
+│   │   │     └── not-found-page
+│   │   │
+│   │   ├── favorites/
+│   │   │     ├── pages/
+│   │   │     ├── components/
+│   │   │     └── models/            (favorito + puntuación)
+│   │   │           └── fav-model.ts
+│   │   │
+│   │   ├── profile/
+│   │   │
+│   │   ├── auth/
+│   │   │     ├── pages/
+│   │   │     ├── components/
+│   │   │     └── models/            (modelos exclusivos de auth)
+│   │   │           └── auth-model.ts
+│   │   │
+│   │   └── stats/
+│   │
+│   └── mocks/               → datos de prueba / respuestas reales de ejemplo
+│         ├── movies-mock.ts
+│         ├── movie-detail-mock.json
+│         └── person-detail-mock.json
+│
+└── environments/            → configuración de entornos y claves de API
+      ├── environment.ts               (no se sube, tiene las claves reales)
+      ├── environment.development.ts   (no se sube, tiene las claves reales)
+      └── environment.example.ts       (se sube, con claves de ejemplo)
 ```
-src/app/
-│
-├── core/ → cosas que existen una sola vez (singleton)
-│   ├── services/
-│   │     └── movie-service.ts  (habla con TMDB)
-│   ├── guards/
-│   ├── interceptors/
-│   └── constants/
-│
-├── shared/  → solo lo que usan 2+ 
-│   ├── components/
-│   │      ├── header/
-│   │      └── footer/
-│   ├── pipes/
-│   │      └── tmdb-image-pipe.ts
-│   ├── directives/
-│   └── ui/
-│
-├── models/ → Interfaces globales
-│   ├── movie-model.ts
-│   ├── movie-detail-model.ts //merece la pena??
-│   ├── genre-model.ts
-│   ├── person-model.ts
-│   ├── credits-model.ts
-│   └── pagination-model.ts
-│
-├── features/  → una carpeta por funcionalidad; las páginas van sueltas dentro de su feature
-│   │
-│   ├── home/
-│   │     └── home-page
-│   │
-│   ├── movies/
-│   │   ├── movies-page
-│   │   ├── movie-detail-page
-│   │   └── components/
-│   │        ├── movie-card
-│   │        ├── movie-gallery
-│   │        ├── movie-filters
-│   │        └── search-bar
-│   │
-│   ├── people/  →  actor y director
-│   │     └── person-detail-page
-│   │
-│   ├── not-found/
-│   │     └── not-found-page
-│   │
-│   ├── favorites/
-│   │     ├── pages/
-│   │     ├── components/
-│   │     └── models/               (favorito + puntuación)
-│   │           └── fav-model.ts
-│   │
-│   ├── profile/
-│   │
-│   ├── auth/
-│   │     ├── pages/
-│   │     ├── components/
-│   │     └── models/               (modelos exclusivos de auth)
-│   │          └── auth-model.ts
-│   │
-│   └── stats/
-│
-├── mocks/   → datos de prueba (temporal)
-│   └── movies-mock.ts
-│
-└── environments/  → configuración de entornos y claves de API
-    ├── environment.ts              (no se sube, tiene la clave real)
-    ├── environment.development.ts  (no se sube, tiene la clave real)
-    └── environment.example.ts      (se sube, con una clave falsa)
-```
-
 
 ## Features
-Movie discovery
-Search and filters
-Movie details
-User authentication
-Favorites management
-Personal ratings
-
-
+- Movie discovery
+- Search and filters
+- Movie, credits and person details
+- User authentication
+- Favorites management
+- Personal ratings
 ### Test
 
 ```bash
