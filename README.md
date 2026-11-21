@@ -61,7 +61,17 @@ main
     ├── fix/search-filters-integration
     ├── refactor/movie-gallery-state
     ├── feature/hu-1-6-api-connexion
-    └── feature/hu-2-1-detail-routes
+    ├── feature/hu-2-1-detail-routes
+    ├── 
+    ├── 
+    ├── 
+    ├── feature/hu-3-1-register
+    ├── feature/hu-3-2-login-logout
+    ├──
+    ├──
+    ├──
+    └── 
+
 ```
 
 
@@ -69,45 +79,59 @@ main
 ```
 src/app/
 │
-├── core/ → cosas que existen una sola vez (singleton)
+├── core/ 
+│   ├── data/
+│   │     └── auth-errors.json
 │   ├── services/
-│   │     └── movie-service.ts  (habla con TMDB)
-│   ├── guards/
-│   ├── interceptors/
-│   └── constants/
+│   │     ├── auth-service.ts  
+│   │     ├── genre-service.ts  
+│   │     └── movie-service.ts  
+│   │ 
+│   ├── (NOT YET) guards/
+│   ├── (NOT YET) interceptors/
+│   └── (NOT YET) constants/
 │
-├── shared/  → solo lo que usan 2+ 
+├── shared/  
 │   ├── components/
-│   │      ├── header/
-│   │      └── footer/
+│   │      ├── header-component/
+│   │      └── footer-component/
 │   ├── pipes/
 │   │      └── tmdb-image-pipe.ts
-│   ├── directives/
-│   └── ui/
+│   ├── (NOT YET) directives/
+│   └── (NOT YET) ui/
 │
-├── models/ → Interfaces globales
-│   ├── movie-model.ts
-│   ├── movie-detail-model.ts //merece la pena??
+├── models/
+│   ├── pagination-model.ts
 │   ├── genre-model.ts
-│   ├── person-model.ts
-│   ├── credits-model.ts
-│   └── pagination-model.ts
+│   ├── movie-model.ts
+│   ├── sort-order-model.ts
+│   ├── (NOT YET) movie-detail-model.ts 
+│   ├── (NOT YET) person-model.ts
+│   └── (NOT YET) credits-model.ts
 │
 ├── features/  → una carpeta por funcionalidad; las páginas van sueltas dentro de su feature
 │   │
-│   ├── home/
-│   │     └── home-page
+│   ├── auth/
+│   │     └── components
+│   │           ├── register/
+│   │           ├── login/
+│   │           ├── (NOT YET) pages/
+│   │           └── models/
+│   │                  └── auth-model.ts/
+│   │
+│   ├── home/ 
+│   │      └── home-page
 │   │
 │   ├── movies/
-│   │   ├── movies-page
-│   │   ├── movie-detail-page
-│   │   └── components/
-│   │        ├── movie-card
-│   │        ├── movie-gallery
-│   │        ├── movie-filters
-│   │        └── search-bar
+│   │      ├── movies-page
+│   │      ├── movie-detail-page
+│   │      └── components/
+│   │           ├── movie-card
+│   │           ├── movie-gallery
+│   │           ├── movie-filters
+│   │           └── search-bar
 │   │
-│   ├── people/  →  actor y director
+│   ├── people/ 
 │   │     └── person-detail-page
 │   │
 │   ├── not-found/
@@ -116,26 +140,20 @@ src/app/
 │   ├── favorites/
 │   │     ├── pages/
 │   │     ├── components/
-│   │     └── models/               (favorito + puntuación)
+│   │     └── models/             
 │   │           └── fav-model.ts
 │   │
 │   ├── profile/
-│   │
-│   ├── auth/
-│   │     ├── pages/
-│   │     ├── components/
-│   │     └── models/               (modelos exclusivos de auth)
-│   │          └── auth-model.ts
-│   │
-│   └── stats/
+│   └── (NOT YET)stats/
 │
-├── mocks/   → datos de prueba (temporal)
+├── mocks/ (borrable??)
+    ├── genre-mock.ts
 │   └── movies-mock.ts
 │
-└── environments/  → configuración de entornos y claves de API
-    ├── environment.ts              (no se sube, tiene la clave real)
-    ├── environment.development.ts  (no se sube, tiene la clave real)
-    └── environment.example.ts      (se sube, con una clave falsa)
+└── environments/  
+    ├── environment.ts              (No disponible en GitHub)
+    ├── environment.development.ts  (No disponible en GitHub)
+    └── environment.example.ts      
 ```
 
 

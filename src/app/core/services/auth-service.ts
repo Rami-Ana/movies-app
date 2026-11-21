@@ -19,8 +19,6 @@ export class AuthService {
       this.currentUser.set(user);
       this.currentAuthReady.set(true);
     });
-
-
   }
 
   register(email: string, password: string) {
