@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
@@ -10,4 +10,14 @@ import { AuthService } from '../../../core/services/auth-service';
 })
 export class HeaderComponent {
 
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  user = this.authService.user;
+  authReady = this.authService.authReady;
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    await this.router.navigate(['/']);
+  }
 }
