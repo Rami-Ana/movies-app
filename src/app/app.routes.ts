@@ -7,6 +7,7 @@ import { Register } from './features/auth/components/register/register';
 import {MovieDetailPage} from './features/movies/movie-detail-page';
 import { PersonDetailPage } from './features/people/person-detail-page';
 import { NotFoundPage } from './features/not-found/not-found-page';
+import { Login } from './features/auth/components/login/login';
 
 export const routes: Routes = [
   { path: '', component: HomePage },
@@ -16,7 +17,7 @@ export const routes: Routes = [
   { path: 'favorites', component: FavoritesPage },
   { path: 'profile', component: ProfilePage },
   { path: 'register', component: Register },
+  { path: 'login', component: Login },
 
-  // Siempre al final: atrapa rutas que no existan (ej. /cualquier-cosa)
   { path: '**', component: NotFoundPage },
 ];

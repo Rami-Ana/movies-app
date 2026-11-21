@@ -62,36 +62,77 @@ main
     ├── refactor/movie-gallery-state
     ├── feature/hu-1-6-api-connexion
     ├── feature/hu-2-1-detail-routes
-    └── feature/hu-2-2-detail-service
+    ├── 
+    ├── 
+    ├── 
+    ├── feature/hu-3-1-register
+    ├── feature/hu-3-2-login-logout
+    ├──
+    ├──
+    ├──
+    └── 
+
 ```
 
 ## Architecture
-```text
-src/
-├── app/
-│   ├── core/                → cosas que existen una sola vez (singleton)
-│   │   ├── services/
-│   │   │     └── movie-service.ts   (habla con TMDB: listado, detalle, créditos y persona)
-│   │   ├── guards/
-│   │   ├── interceptors/
-│   │   └── constants/
+```
+src/app/
+│
+├── core/ 
+│   ├── data/
+│   │     └── auth-errors.json
+│   │ 
+│   ├── services/
+│   │     ├── auth-service.ts  
+│   │     ├── genre-service.ts  
+│   │     └── movie-service.ts  
+│   │ 
+│   ├── (NOT YET) guards/
+│   ├── (NOT YET) interceptors/
+│   └── (NOT YET) constants/
+│
+├── shared/  
+│   ├── components/
+│   │      ├── header-component/
+│   │      └── footer-component/
+│   ├── pipes/
+│   │      └── tmdb-image-pipe.ts
+│   ├── (NOT YET) directives/
+│   └── (NOT YET) ui/
+│
+├── models/
+│   ├── pagination-model.ts
+│   ├── genre-model.ts
+│   ├── movie-model.ts
+│   ├── sort-order-model.ts
+│   ├── (NOT YET) movie-detail-model.ts 
+│   ├── (NOT YET) person-model.ts
+│   └── (NOT YET) credits-model.ts
+│
+├── features/  → una carpeta por funcionalidad; las páginas van sueltas dentro de su feature
 │   │
-│   ├── shared/              → solo lo que usan 2+ funcionalidades
-│   │   ├── components/
-│   │   │      ├── header/
-│   │   │      └── footer/
-│   │   ├── pipes/
-│   │   │      └── tmdb-image-pipe.ts
-│   │   ├── directives/
-│   │   └── ui/
+│   ├── auth/
+│   │     └── components
+│   │           ├── register/
+│   │           ├── login/
+│   │           ├── (NOT YET) pages/
+│   │           └── models/
+│   │                  └── auth-model.ts/
 │   │
-│   ├── models/              → interfaces globales
-│   │   ├── movie-model.ts
-│   │   ├── movie-detail-model.ts
-│   │   ├── credits-model.ts
-│   │   ├── person-model.ts
-│   │   ├── genre-model.ts
-│   │   └── pagination-model.ts
+│   ├── home/ 
+│   │      └── home-page
+│   │
+│   ├── movies/
+│   │      ├── movies-page
+│   │      ├── movie-detail-page
+│   │      └── components/
+│   │           ├── movie-card
+│   │           ├── movie-gallery
+│   │           ├── movie-filters
+│   │           └── search-bar
+│   │
+│   ├── people/ 
+│   │     └── person-detail-page
 │   │
 │   ├── features/            → una carpeta por funcionalidad; las páginas van dentro de su feature
 │   │   ├── home/
@@ -128,15 +169,24 @@ src/
 │   │   │
 │   │   └── stats/
 │   │
-│   └── mocks/               → datos de prueba / respuestas reales de ejemplo
-│         ├── movies-mock.ts
-│         ├── movie-detail-mock.json
-│         └── person-detail-mock.json
+│   ├── favorites/
+│   │     ├── pages/
+│   │     ├── components/
+│   │     └── models/             
+│   │           └── fav-model.ts
+│   │
+│   ├── profile/
+│   └── (NOT YET)stats/
 │
-└── environments/            → configuración de entornos y claves de API
-      ├── environment.ts               (no se sube, tiene las claves reales)
-      ├── environment.development.ts   (no se sube, tiene las claves reales)
-      └── environment.example.ts       (se sube, con claves de ejemplo)
+├── mocks/ (borrable??)
+│   ├── genre-mock.ts
+│   ├── movie-detail-mock.ts
+│   └── movies-mock.ts
+│
+└── environments/  
+    ├── environment.ts              (No disponible en GitHub)
+    ├── environment.development.ts  (No disponible en GitHub)
+    └── environment.example.ts      
 ```
 
 ## Features
