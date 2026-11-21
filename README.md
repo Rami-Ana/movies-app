@@ -74,7 +74,6 @@ main
 
 ```
 
-
 ## Architecture
 ```
 src/app/
@@ -82,6 +81,7 @@ src/app/
 ├── core/ 
 │   ├── data/
 │   │     └── auth-errors.json
+│   │ 
 │   ├── services/
 │   │     ├── auth-service.ts  
 │   │     ├── genre-service.ts  
@@ -134,8 +134,40 @@ src/app/
 │   ├── people/ 
 │   │     └── person-detail-page
 │   │
-│   ├── not-found/
-│   │     └── not-found-page
+│   ├── features/            → una carpeta por funcionalidad; las páginas van dentro de su feature
+│   │   ├── home/
+│   │   │     └── home-page
+│   │   │
+│   │   ├── movies/
+│   │   │   ├── movies-page
+│   │   │   ├── movie-detail-page
+│   │   │   └── components/
+│   │   │        ├── movie-card
+│   │   │        ├── movie-gallery
+│   │   │        ├── movie-filters
+│   │   │        └── search-bar
+│   │   │
+│   │   ├── people/            → actor y director
+│   │   │     └── person-detail-page
+│   │   │
+│   │   ├── not-found/
+│   │   │     └── not-found-page
+│   │   │
+│   │   ├── favorites/
+│   │   │     ├── pages/
+│   │   │     ├── components/
+│   │   │     └── models/            (favorito + puntuación)
+│   │   │           └── fav-model.ts
+│   │   │
+│   │   ├── profile/
+│   │   │
+│   │   ├── auth/
+│   │   │     ├── pages/
+│   │   │     ├── components/
+│   │   │     └── models/            (modelos exclusivos de auth)
+│   │   │           └── auth-model.ts
+│   │   │
+│   │   └── stats/
 │   │
 │   ├── favorites/
 │   │     ├── pages/
@@ -147,7 +179,8 @@ src/app/
 │   └── (NOT YET)stats/
 │
 ├── mocks/ (borrable??)
-    ├── genre-mock.ts
+│   ├── genre-mock.ts
+│   ├── movie-detail-mock.ts
 │   └── movies-mock.ts
 │
 └── environments/  
@@ -156,16 +189,13 @@ src/app/
     └── environment.example.ts      
 ```
 
-
 ## Features
-Movie discovery
-Search and filters
-Movie details
-User authentication
-Favorites management
-Personal ratings
-
-
+- Movie discovery
+- Search and filters
+- Movie, credits and person details
+- User authentication
+- Favorites management
+- Personal ratings
 ### Test
 
 ```bash
