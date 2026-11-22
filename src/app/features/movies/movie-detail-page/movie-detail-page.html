@@ -1,41 +1,42 @@
 @if (id() === null) {
 <app-not-found-page />
 } @else {
+@if (movie(); as peli) {
 <section class="movie-detail">
-    @if (movie().poster) {
-    <img [src]="movie().poster" [alt]="movie().title" />
+    @if (peli.poster) {
+    <img [src]="peli.poster" [alt]="peli.title" />
     }
 
     <div>
-        <h1>{{ movie().title }}</h1>
+        <h1>{{ peli.title }}</h1>
 
-        @if (movie().tagline) {
-        <p><em>{{ movie().tagline }}</em></p>
+        @if (peli.tagline) {
+        <p>{{ peli.tagline }}</p>
         }
 
         <p>
-            <span>Año: {{ movie().releaseDate.slice(0, 4) }}</span>
-            @if (movie().runtime) {
-            <span> · Duración: {{ movie().runtime }} min</span>
+            Año: {{ peli.releaseDate.slice(0, 4) }}
+            @if (peli.runtime) {
+            - Duración: {{ peli.runtime }} min
             }
-            <span> · Nota: {{ movie().rating }}</span>
+            - Nota: {{ peli.rating }}
         </p>
 
-        @if (movie().genres.length > 0) {
+        @if (peli.genres.length > 0) {
         <ul>
-            @for (genre of movie().genres; track genre.id) {
+            @for (genre of peli.genres; track genre.id) {
             <li>{{ genre.name }}</li>
             }
         </ul>
         }
 
         <h2>Sinopsis</h2>
-        <p>{{ movie().overview }}</p>
+        <p>{{ peli.overview }}</p>
 
-        @if (movie().directors.length > 0) {
+        @if (peli.directors.length > 0) {
         <h2>Dirección</h2>
         <ul>
-            @for (director of movie().directors; track director.id) {
+            @for (director of peli.directors; track director.id) {
             <li>
                 <a [routerLink]="['/person', director.id]">{{ director.name }}</a>
             </li>
@@ -43,14 +44,17 @@
         </ul>
         }
 
-        @if (movie().cast.length > 0) {
+        @if (peli.cast.length > 0) {
         <h2>Reparto principal</h2>
         <div>
-            @for (actor of movie().cast.slice(0, 12); track actor.id) {
+            @for (actor of peli.cast.slice(0, 12); track actor.id) {
             <app-actor-card [actor]="actor" />
             }
         </div>
         }
     </div>
 </section>
+} @else {
+<p>Cargando película...</p>
+}
 }

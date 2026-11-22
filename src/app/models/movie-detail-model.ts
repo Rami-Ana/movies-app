@@ -1,4 +1,5 @@
 import { ModelGenre } from './genre-model';
+import { ModelCredits } from './credits-model';
 
 export interface ModelMovieDetail {
     id: number;
@@ -24,7 +25,7 @@ export interface Actor {
     photo: string | null;
 }
 
-export interface Plataforma {
+export interface Plataform {
     id: number;
     name: string;
     logo: string | null;
@@ -43,5 +44,29 @@ export interface ModelMovie {
     directors: Director[];
     cast: Actor[];
     trailerKey: string | null; // clave de YouTube si hay tráiler
-    platforms: Plataforma[]; // plataformas en España
+    platforms: Plataform[]; // plataformas en España
+}
+
+export interface ModelVideo {
+    key: string;
+    site: string;
+    type: string;
+}
+
+export interface ModelVideoResponse {
+    results: ModelVideo[];
+}
+
+export interface ModelPlatformItem {
+    provider_id: number;
+    provider_name: string;
+    logo_path: string | null;
+}
+
+export interface ModelPlatformResponse {
+    results: {
+        ES?: {
+            flatrate?: ModelPlatformItem[];
+        };
+    };
 }
