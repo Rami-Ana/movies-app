@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ModelPaginationResponse } from '../../models/pagination-model';
-import { ModelMovieDetail } from '../../models/movie-detail-model';
+import { ModelMovieDetail, ModelVideoResponse, ModelPlatformResponse } from '../../models/movie-detail-model';
 import { ModelCredits } from '../../models/credits-model';
 import { ModelPersonDetail } from '../../models/person-model';
 import { moviesMock } from '../../mocks/movies-mock';
@@ -31,19 +31,35 @@ export class MovieService {
 
     }
 
-//para traer los datos reales de las pantallas de detalle:
+    //para traer los datos reales de las pantallas de detalle:
     getMovieDetails(id: number): Observable<ModelMovieDetail> {
         return this.http.get<ModelMovieDetail>(
             `${this.baseUrl}/movie/${id}?api_key=${this.apiKey}&language=es-ES`
         );
     }
 
+    //trae directores y actores de una pelicula
     getMovieCredits(id: number): Observable<ModelCredits> {
         return this.http.get<ModelCredits>(
             `${this.baseUrl}/movie/${id}/credits?api_key=${this.apiKey}`
         );
     }
 
+    //trae videos asociados a la pelicula(trailers, clips,etc)   
+    getMovieVideos(id: number): Observable<ModelVideoResponse> {
+        return this.http.get<ModelVideoResponse>(
+            `${this.baseUrl}/movie/${id}/videos?api_key=${this.apiKey}&language=es-ES`
+        );
+    }
+
+    //trae plataformas de streaming donde ver la pelicula por pais
+    getMoviePlatforms(id: number): Observable<ModelPlatformResponse> {
+        return this.http.get<ModelPlatformResponse>(
+            `${this.baseUrl}/movie/${id}/watch/providers?api_key=${this.apiKey}`
+        );
+    }
+
+    //trae los datos biograficos y detalles de un actor o director
     getPersonDetails(id: number): Observable<ModelPersonDetail> {
         return this.http.get<ModelPersonDetail>(
             `${this.baseUrl}/person/${id}?api_key=${this.apiKey}&language=es-ES`
