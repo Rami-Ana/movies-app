@@ -4,20 +4,21 @@ import { HomePage } from './features/home/home-page';
 import { FavoritesPage } from './features/favorites/favorites-page';
 import { ProfilePage } from './features/profile/profile-page';
 import { Register } from './features/auth/components/register/register';
-import {MovieDetailPage} from './features/movies/movie-detail-page';
+import { MovieDetailPage } from './features/movies/movie-detail-page';
 import { PersonDetailPage } from './features/people/person-detail-page';
 import { NotFoundPage } from './features/not-found/not-found-page';
 import { Login } from './features/auth/components/login/login';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   { path: '', component: HomePage },
   { path: 'movies', component: MoviesPage },
-  { path: 'movie/:id', component: MovieDetailPage, title: 'Detalle de película'}, // Aparece en la pestaña del navegador
-  { path: 'person/:id', component: PersonDetailPage, title: 'Detalle de persona'}, //Aparece en la pestaña del navegador
-  { path: 'favorites', component: FavoritesPage },
-  { path: 'profile', component: ProfilePage },
+  { path: 'movie/:id', component: MovieDetailPage, title: 'Detalle de película' }, // Aparece en la pestaña del navegador
+  { path: 'person/:id', component: PersonDetailPage, title: 'Detalle de persona' }, //Aparece en la pestaña del navegador
   { path: 'register', component: Register },
   { path: 'login', component: Login },
+  { path: 'favorites', component: FavoritesPage, canActivate: [authGuard], },
+  { path: 'profile', component: ProfilePage, canActivate: [authGuard], }, 
 
   { path: '**', component: NotFoundPage },
 ];
