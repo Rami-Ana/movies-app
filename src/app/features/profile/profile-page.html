@@ -1,30 +1,37 @@
 <h1>Mi perfil</h1>
 
 @if (user()) {
-    <p><strong>Correo: </strong>{{ user()?.email }}</p>
-    <p><strong>Nombre: </strong>{{ user()?.displayName || 'Sin nombre' }}</p>
-    <p><strong>Fecha de alta: </strong>
-        {{user()?.metadata?.creationTime | date:'dd/MM/yyyy'}}</p>
-    <hr>
+<p><strong>Correo: </strong>{{ user()?.email }}</p>
+<p><strong>Nombre: </strong>{{ user()?.displayName || 'Sin nombre' }}</p>
+<p><strong>Fecha de alta: </strong>
+    {{user()?.metadata?.creationTime | date:'dd/MM/yyyy'}}</p>
+<hr>
 
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
 
-        <label for="displayName">Nombre de usuario</label>
+    <label for="displayName">Nombre de usuario</label>
 
-        <input id="displayName" type="text" formControlName="displayName"
-            [attr.aria-invalid]=" submitted && profileForm.controls.displayName.invalid">
+    <input id="displayName" type="text" formControlName="displayName"
+        aria-describedby="displayName-required-error displayName-blank-error displayName-maxlength-error"
+        [attr.aria-invalid]="submitted && profileForm.controls.displayName.invalid">
 
-        @if (submitted && profileForm.controls.displayName.hasError('required')) {
-            <p role="alert">El nombre es obligatorio.</p>
-        }
+    @if (submitted && profileForm.controls.displayName.hasError('required')) {
+    <p id="displayName-required-error" role="alert">El nombre es obligatorio.</p>
+    }
+    @if (submitted && profileForm.controls.displayName.hasError('blank')) {
+    <p id="displayName-blank-error" role="alert">El nombre no puede contener solo espacios.</p>
+    }
+    @if (submitted && profileForm.controls.displayName.hasError('maxlength')) {
+    <p id="displayName-maxlength-error" role="alert">Máximo 50 caracteres.</p>
+    }
 
-        <button type="submit" [disabled]="submitting()">
-            @if (submitting()) { Guardando...} @else { Guardar cambios}
-        </button>
+    <button type="submit" [disabled]="submitting()">
+        @if (submitting()) { Guardando...} @else { Guardar cambios}
+    </button>
 
-    </form>
+</form>
 
-    @if (successMessage()) {<div role="status">{{ successMessage() }}</div>}
-    @if (errorMessage()) {<div role="alert">{{ errorMessage() }}</div>}
+@if (successMessage()) {<div role="status">{{ successMessage() }}</div>}
+@if (errorMessage()) {<div role="alert">{{ errorMessage() }}</div>}
 
 }

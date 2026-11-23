@@ -1,7 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../core/services/auth-service';
 import { DatePipe } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function notBlankValidator(control: AbstractControl): ValidationErrors | null {
+const value: string = control.value ?? '';
+return value.length > 0 && value.trim().length === 0 ? { blank: true } : null;
+}
 
 @Component({
   imports: [DatePipe, ReactiveFormsModule,],
@@ -22,14 +27,13 @@ export class ProfilePage {
   errorMessage = signal('');
 
   profileForm = this.formBuilder.group({
-    displayName: [this.user()?.displayName ?? '',
-    [Validators.required, Validators.maxLength(50),],
+    displayName: [this.user()?.displayName ?? '', 
+    [Validators.required, notBlankValidator, Validators.maxLength(50),],
     ],
   });
 
 
   async onSubmit(): Promise<void> {
-
     if (this.submitting()) { return; }
     this.submitted = true;
     if (this.profileForm.invalid) { return; }
@@ -38,11 +42,8 @@ export class ProfilePage {
     this.errorMessage.set('');
     this.submitting.set(true);
 
-    const displayName =
-      this.profileForm
-        .getRawValue()
-        .displayName
-        ?.trim();
+    const displayName = this.profileForm.getRawValue().displayName?.trim();
+
 
     try {
       await this.authService.updateDisplayName(displayName!,);
@@ -53,3 +54,5 @@ export class ProfilePage {
   }
 
 }
+
+
