@@ -5,9 +5,9 @@ import { NotFoundPage } from '../not-found/not-found-page';
 import { MovieService } from '../../core/services/movie-service';
 import { ModelMovie } from '../../models/movie-model';
 import { ModelPersonDetail } from '../../models/person-model';
-
+import { MovieCard } from '../movies/components/movie-card/movie-card';
 @Component({
-  imports: [NotFoundPage],
+  imports: [NotFoundPage, MovieCard],
   selector: 'app-person-detail-page',
   styleUrl: './person-detail-page.css',
   templateUrl: './person-detail-page.html',
