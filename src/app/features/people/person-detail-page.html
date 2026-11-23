@@ -22,14 +22,30 @@
     <section class="person-filmography">
       <h2>Películas en las que participó</h2>
       @if (castMovies().length > 0) {
-        <p>Películas en reparto: {{ castMovies().length }}</p>
+        <ul>
+          @for (movie of castMovies().slice(0, castLimit()); track movie.id) {
+            <li>{{ movie.title }} ({{ movie.release_date || 'Sin fecha' }})</li>
+          }
+        </ul>
+
+        @if (castMovies().length > castLimit()) {
+          <button type="button" (click)="showMoreCast()">Mostrar más</button>
+        }
       } @else {
         <p>No hay películas en el reparto disponibles.</p>
       }
 
       <h2>Películas dirigidas</h2>
       @if (directedMovies().length > 0) {
-        <p>Películas dirigidas: {{ directedMovies().length }}</p>
+        <ul>
+          @for (movie of directedMovies().slice(0, directedLimit()); track movie.id) {
+            <li>{{ movie.title }} ({{ movie.release_date || 'Sin fecha' }})</li>
+          }
+        </ul>
+
+        @if (directedMovies().length > directedLimit()) {
+          <button type="button" (click)="showMoreDirected()">Mostrar más</button>
+        }
       } @else {
         <p>No hay películas dirigidas disponibles.</p>
       }
