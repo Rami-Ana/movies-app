@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, User, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, User, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -8,7 +8,7 @@ export class AuthService {
   private app = initializeApp(environment.firebase);
   private auth = getAuth(this.app);
 
-  private currentUser = signal<User | null>(null);
+  private currentUser = signal<User | null>(null, { equal: () => false });
   private currentAuthReady = signal<boolean>(false);
   readonly user = this.currentUser.asReadonly();
   readonly authReady = this.currentAuthReady.asReadonly();
@@ -18,6 +18,21 @@ export class AuthService {
     onAuthStateChanged(this.auth, (user) => {
       this.currentUser.set(user);
       this.currentAuthReady.set(true);
+    });
+  }
+
+
+  async waitForAuthReady(): Promise<void> {
+    if (this.authReady()) { return; }
+    await new Promise<void>((resolve) => {
+
+      const interval = setInterval(() => {
+        if (this.authReady()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+
     });
   }
 
@@ -36,8 +51,14 @@ export class AuthService {
     );
   }
 
-  logout() {
-    return signOut(this.auth);
+  logout() { return signOut(this.auth); }
+
+  async updateDisplayName(displayName: string,): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) { throw new Error('No hay usuario autenticado'); }//<-
+    await updateProfile(user, { displayName },);
+    this.currentUser.set(this.auth.currentUser,);
   }
 
 }
+
