@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../core/services/auth-service';
 import { DatePipe } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 function notBlankValidator(control: AbstractControl): ValidationErrors | null {
 const value: string = control.value ?? '';
@@ -18,6 +19,7 @@ export class ProfilePage {
 
   private authService = inject(AuthService);
   private formBuilder = inject(FormBuilder); 
+  private router = inject(Router);
 
   user = this.authService.user;
 
@@ -52,6 +54,11 @@ export class ProfilePage {
       this.errorMessage.set('No se ha podido actualizar el perfil.');
     } finally { this.submitting.set(false); }
   }
+
+async logout(): Promise<void> {
+  await this.authService.logout();
+  await this.router.navigate(['/']);
+}
 
 }
 

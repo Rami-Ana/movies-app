@@ -34,4 +34,6 @@
 @if (successMessage()) {<div role="status">{{ successMessage() }}</div>}
 @if (errorMessage()) {<div role="alert">{{ errorMessage() }}</div>}
 
+  <hr>
+  <button type="button" (click)="logout()">Cerrar sesión</button>
 }
