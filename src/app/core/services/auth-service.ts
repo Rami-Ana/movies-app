@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, User, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, User, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -21,20 +21,21 @@ export class AuthService {
     });
   }
 
-async waitForAuthReady(): Promise<void> {
-  
-  if (this.authReady()) {return;}  
-  await new Promise<void>((resolve) => {
 
-    const interval = setInterval(() => {
-      if (this.authReady()) {
-        clearInterval(interval);
-        resolve(); 
-      }
-    }, 50);
+  async waitForAuthReady(): Promise<void> {
 
-  });
-}
+    if (this.authReady()) { return; }
+    await new Promise<void>((resolve) => {
+
+      const interval = setInterval(() => {
+        if (this.authReady()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+
+    });
+  }
 
   register(email: string, password: string) {
     return createUserWithEmailAndPassword(
@@ -51,8 +52,14 @@ async waitForAuthReady(): Promise<void> {
     );
   }
 
-  logout() {
-    return signOut(this.auth);
+  logout() { return signOut(this.auth); }
+
+  async updateDisplayName(displayName: string,): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) { return; }
+    await updateProfile(user, { displayName },);
+    this.currentUser.set(this.auth.currentUser,);
   }
 
 }
+

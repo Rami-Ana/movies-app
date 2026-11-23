@@ -1,1 +1,30 @@
-<p>profile-page works!</p>
+<h1>Mi perfil</h1>
+
+@if (user()) {
+    <p><strong>Correo: </strong>{{ user()?.email }}</p>
+    <p><strong>Nombre: </strong>{{ user()?.displayName || 'Sin nombre' }}</p>
+    <p><strong>Fecha de alta: </strong>
+        {{user()?.metadata?.creationTime | date:'dd/MM/yyyy'}}</p>
+    <hr>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <label for="displayName">Nombre de usuario</label>
+
+        <input id="displayName" type="text" formControlName="displayName"
+            [attr.aria-invalid]=" submitted && profileForm.controls.displayName.invalid">
+
+        @if (submitted && profileForm.controls.displayName.hasError('required')) {
+            <p role="alert">El nombre es obligatorio.</p>
+        }
+
+        <button type="submit" [disabled]="submitting()">
+            @if (submitting()) { Guardando...} @else { Guardar cambios}
+        </button>
+
+    </form>
+
+    @if (successMessage()) {<div role="status">{{ successMessage() }}</div>}
+    @if (errorMessage()) {<div role="alert">{{ errorMessage() }}</div>}
+
+}
