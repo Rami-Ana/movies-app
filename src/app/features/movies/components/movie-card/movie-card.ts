@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ModelMovie } from '../../../../models/movie-model';
 import { TmdbImagePipe } from '../../../../shared/pipes/tmdb-image-pipe';
 
 @Component({
-  imports: [TmdbImagePipe], // El pipe tmdbImage convierte /abc123.jpg en la dirección completa del póste
+  imports: [TmdbImagePipe, RouterLink], // El pipe tmdbImage convierte /abc123.jpg en la dirección completa del póste
   selector: 'app-movie-card',
   styleUrl: './movie-card.css',
   templateUrl: './movie-card.html',
