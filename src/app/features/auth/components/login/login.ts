@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth-service';
 import { FirebaseError } from 'firebase/app';
 
@@ -14,9 +14,10 @@ import authErrors from '../../../../core/data/auth-errors.json';
 })
 export class Login {
 
-  private formBuilder  = inject(FormBuilder);
+  private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute,); 
 
   submitted = false;
   submitting = signal(false);
@@ -28,8 +29,10 @@ export class Login {
   });
 
   async onSubmit(): Promise<void> {
+
     if (this.submitting()) { return; }
     this.submitted = true;
+
     if (this.loginForm.invalid) { return; }
 
     this.errorMessage.set('');
@@ -41,7 +44,17 @@ export class Login {
       await this.authService.login(email!, password!);
       this.loginForm.reset();
       this.submitted = false;
-      await this.router.navigate(['/movies']);
+
+      const returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl');
+      const isInternalRoute =
+        returnUrl?.startsWith('/') && !returnUrl.startsWith('//');
+
+      if (returnUrl && isInternalRoute) {
+        await this.router.navigateByUrl(returnUrl,);
+      } else {
+        await this.router.navigate(['/movies']);
+      }
+
     } catch (error) {
       const messages: Record<string, string> = authErrors;
       const code =

@@ -22,6 +22,7 @@ export class AuthService {
   }
 
 async waitForAuthReady(): Promise<void> {
+  
   if (this.authReady()) {return;}  
   await new Promise<void>((resolve) => {
 
