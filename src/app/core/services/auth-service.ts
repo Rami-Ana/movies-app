@@ -21,6 +21,21 @@ export class AuthService {
     });
   }
 
+async waitForAuthReady(): Promise<void> {
+  
+  if (this.authReady()) {return;}  
+  await new Promise<void>((resolve) => {
+
+    const interval = setInterval(() => {
+      if (this.authReady()) {
+        clearInterval(interval);
+        resolve(); 
+      }
+    }, 50);
+
+  });
+}
+
   register(email: string, password: string) {
     return createUserWithEmailAndPassword(
       this.auth,

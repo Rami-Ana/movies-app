@@ -8,16 +8,18 @@ import { MovieDetailPage } from './features/movies/movie-detail-page/movie-detai
 import { PersonDetailPage } from './features/people/person-detail-page';
 import { NotFoundPage } from './features/not-found/not-found-page';
 import { Login } from './features/auth/components/login/login';
+import { authGuard } from './core/guards/auth-guard';
+import { guestGuard } from './core/guards/guest-guard';
 
 export const routes: Routes = [
   { path: '', component: HomePage },
   { path: 'movies', component: MoviesPage },
-  { path: 'movie/:id', component: MovieDetailPage, title: 'Detalle de película'}, // Aparece en la pestaña del navegador
-  { path: 'person/:id', component: PersonDetailPage, title: 'Detalle de persona'}, //Aparece en la pestaña del navegador
-  { path: 'favorites', component: FavoritesPage },
-  { path: 'profile', component: ProfilePage },
-  { path: 'register', component: Register },
-  { path: 'login', component: Login },
+  { path: 'movie/:id', component: MovieDetailPage, title: 'Detalle de película' }, // Aparece en la pestaña del navegador
+  { path: 'person/:id', component: PersonDetailPage, title: 'Detalle de persona' }, //Aparece en la pestaña del navegador
+  { path: 'register', component: Register, canActivate: [guestGuard], },
+  { path: 'login', component: Login, canActivate: [guestGuard], },
+  { path: 'favorites', component: FavoritesPage, canActivate: [authGuard], },
+  { path: 'profile', component: ProfilePage, canActivate: [authGuard], },
 
   { path: '**', component: NotFoundPage },
 ];
