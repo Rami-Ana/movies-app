@@ -1,0 +1,94 @@
+@if (id() === null) {
+<app-not-found-page />
+} @else {
+@if (movie(); as peli) {
+<section class="movie-detail">
+    @if (peli.poster) {
+    <img [src]="peli.poster" [alt]="peli.title" />
+    }
+
+    <div class="movie-info">
+        <h1>{{ peli.title }}</h1>
+
+        <!-- EPICA 4: AQUI ESTARA FavoriteButton y RatingInput -->
+
+        @if (peli.tagline) {
+        <p>{{ peli.tagline }}</p>
+        }
+
+        <p>
+            Año: {{ peli.releaseDate.slice(0, 4) }}
+            @if (peli.runtime) {
+- Duración: {{ peli.runtime }} min
+            }
+- Nota: {{ peli.rating }}
+        </p>
+
+        @if (peli.genres.length > 0) {
+        <ul>
+            @for (genre of peli.genres; track genre.id) {
+            <li>{{ genre.name }}</li>
+            }
+        </ul>
+        }
+
+        <h2>Sinopsis</h2>
+        <p>{{ peli.overview }}</p>
+
+        @if (peli.directors.length > 0) {
+        <h2>Dirección</h2>
+        <ul>
+            @for (director of peli.directors; track director.id) {
+            <li>
+                <a [routerLink]="['/person', director.id]">{{ director.name }}</a>
+            </li>
+            }
+        </ul>
+        }
+
+        <h2>Dónde verla en España</h2>
+        @if (peli.platforms.length > 0) {
+        <ul>
+            @for (platform of peli.platforms; track platform.id) {
+            <li>
+                @if (platform.logo) {
+                <img [src]="platform.logo" [alt]="platform.name" />
+                }
+                <span>{{ platform.name }}</span>
+            </li>
+            }
+        </ul>
+        <p>Datos de JustWatch</p>
+        } @else {
+        <p>No disponible en plataformas</p>
+        }
+
+        @if (peli.trailerKey) {
+        <h2>Tráiler</h2>
+        @if (!showTrailer()) {
+        <button type="button" (click)="showTrailer.set(true)">Ver tráiler</button>
+        } @else {
+        <button type="button" (click)="showTrailer.set(false)">Cerrar tráiler</button>
+        <iframe
+            [src]="getSafeTrailerUrl(peli.trailerKey)"
+            [title]="'Tráiler de ' + peli.title"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+        ></iframe>
+        }
+        }
+
+        @if (peli.cast.length > 0) {
+        <h2>Reparto principal</h2>
+        <div>
+            @for (actor of peli.cast; track actor.id) {
+            <app-actor-card [actor]="actor" />
+            }
+        </div>
+        }
+    </div>
+</section>
+} @else {
+<p>Cargando película...</p>
+}
+}

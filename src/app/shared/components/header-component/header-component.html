@@ -1,10 +1,20 @@
 <header>
   <nav aria-label="Principal">
     <ul>
-      <li><a routerLink="/">Inicio</a></li>
-      <li><a routerLink="/movies">Exploración</a></li>
-      <li><a routerLink="/favorites">Favoritas</a></li>
-      <li><a routerLink="/profile">Perfil</a></li>
-    </ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/movies">Exploración</a></li>
+        <li><a routerLink="/favorites">Favoritas</a></li>
+        <li><a routerLink="/profile">Perfil</a></li>
+
+        @if (authReady()) {
+          @if (user()) {
+          <li>{{ user()?.displayName || user()?.email }}</li>
+          <li><button (click)="logout()">Cerrar sesión</button></li>
+          } @else {
+          <li><a routerLink="/login">Entrar</a></li>
+          <li><a routerLink="/register">Registrarse</a></li>
+          }
+        }
+      </ul>
   </nav>
 </header>

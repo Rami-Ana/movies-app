@@ -1,15 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MovieCard } from '../movie-card/movie-card';
-import { MovieService } from '../../../../core/services/movie-service';
 import { MovieFilters } from '../movie-filters/movie-filters';
-import { GenreService } from '../../../../core/services/genre-service';
 import { ModelGenre } from '../../../../models/genre-model';
 import { SortOrder } from '../../../../models/sort-order-model';
 import { ActivatedRoute } from '@angular/router';
 import { ModelMovie } from '../../../../models/movie-model';
-
-
+import { Subscription } from 'rxjs';
+import { MovieService } from '../../../../core/services/movie-service';
+import { GenreService } from '../../../../core/services/genre-service';
 
 @Component({
   imports: [MovieCard, MovieFilters],
@@ -17,86 +15,99 @@ import { ModelMovie } from '../../../../models/movie-model';
   styleUrl: './movie-gallery.css',
   templateUrl: './movie-gallery.html',
 })
+
 export class MovieGallery {
-  //1. Atributos: private movieservice...
-  //2. constructor
   private movieService = inject(MovieService);
   private genreService = inject(GenreService);
   private route = inject(ActivatedRoute);
 
-  movies = toSignal(this.movieService.getPopularMovies());
-
-  moviesSearch = signal<ModelMovie[]>([]); //Eve
-  query = signal(''); //comprobar qué es
-
   genres = signal<ModelGenre[]>([]);
-  sortOrder = signal<SortOrder>('popularity');
 
+  //Gestion estado de filtros:
   selectedGenre = signal<number | null>(null);
   minimumVote = signal<number | null>(null);
+  sortOrder = signal<SortOrder>('popularity');
 
-  constructor() {
-    this.loadGenres();
+  // Datos y estado de la carga:
+  movies = signal<ModelMovie[]>([]);
+  query = signal('');
+  status = signal<'loading' | 'error' | 'succes'>('loading');
 
-    this.route.queryParamMap.subscribe((params) => {
+  // Guarda la petición en curso para poder cancelarla si llega otra
+  private moviesRequest?: Subscription;
+
+
+  ngOnInit(): void {
+    this.loadGenres(); // Cargar datos auxiliares para filtros.
+
+    this.route.queryParamMap.subscribe((params) => { // Sincroniz navegación
       this.query.set((params.get('q') ?? '').trim());
-      this.loadMovies();
-    })
-  }
-
-    private loadGenres(): void {
-    this.genreService.getGenres().subscribe({
-      next: (response) => {
-        this.genres.set(response.genres);
-      },
+      this.loadMovies(); // Obtener películas populares o por búsqueda.
     });
   }
 
-  private loadMovies() {
+
+  private loadMovies(): void {
+    this.moviesRequest?.unsubscribe(); // cancela la petición  si sigue en curso
+
+   this.status.set('loading');
+
     const request =
       this.query().length < 2
         ? this.movieService.getPopularMovies()
         : this.movieService.searchMovies(this.query());
 
-    // Cuando lleguen las películas, guardalas para que el HTML las muestre
-    request.subscribe((response) => this.moviesSearch.set(response.results));
+
+    this.moviesRequest = request.subscribe({
+      next: (response) => {
+        this.movies.set(response.results);
+        this.status.set('succes');
+      },
+      error: () => {
+        this.movies.set([]);
+        this.status.set('error');
+      },
+    });
   }
 
-  filteredMovies = computed(() => {
-    let filtered = this.movies()?.results ?? [];
+  private loadGenres(): void {
+    this.genreService.getGenres().subscribe({
+      next: (response) => { this.genres.set(response.genres); },
+      error: () => this.genres.set([]),
+      // sin géneros el filtro queda vacío, pero la galería sigue funcionando
+    });
+  }
 
+
+  //Aplicar filtros: Transformar la lista de películas.
+  filteredMovies = computed(() => {
+    let filtered = this.movies();
     const genre = this.selectedGenre();
     const minimumVote = this.minimumVote();
     const sortOrder = this.sortOrder();
 
     if (genre !== null) {
-      filtered = filtered.filter(movie =>
-        movie.genre_ids.includes(genre)
-      );
+      filtered = filtered.filter((movie) => movie.genre_ids.includes(genre));
     }
 
     if (minimumVote !== null) {
-      filtered = filtered.filter(movie =>
-        Math.round(movie.vote_average * 10) / 10 >= minimumVote
+      filtered = filtered.filter(
+        (movie) => Math.round(movie.vote_average * 10) / 10 >= minimumVote,
       );
     }
 
+    //Orden de visualización:
     switch (sortOrder) {
       case 'popularity':
-        return [...filtered].sort(
-          (a, b) => b.popularity - a.popularity
-        );
+        return [...filtered].sort((a, b) => b.popularity - a.popularity);
 
       case 'vote':
-        return [...filtered].sort(
-          (a, b) => b.vote_average - a.vote_average
-        );
+        return [...filtered].sort((a, b) => b.vote_average - a.vote_average);
 
       case 'release':
         return [...filtered].sort((a, b) => {
           const dateA = a.release_date ? new Date(a.release_date).getTime() : 0;
           const dateB = b.release_date ? new Date(b.release_date).getTime() : 0;
-
           return dateB - dateA;
         });
     }

@@ -1,0 +1,14 @@
+<article>
+    <a [routerLink]="['/person', actor().id]">
+        @if (actor().photo) {
+        <img [src]="'https://image.tmdb.org/t/p/w185' + actor().photo" [alt]="actor().name" />
+        } @else {
+        <div aria-hidden="true">Sin foto</div>
+        }
+
+        <p>{{ actor().name }}</p>
+        @if (actor().character) {
+        <p>{{ actor().character }}</p>
+        }
+    </a>
+</article>

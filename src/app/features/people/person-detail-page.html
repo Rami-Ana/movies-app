@@ -1,0 +1,56 @@
+@if (id() === null) {
+  <app-not-found-page />
+} @else {
+  @if (person(); as personData) {
+    <section class="person-detail">
+      @if (personData.profile_path) {
+        <img
+          [src]="'https://image.tmdb.org/t/p/w500' + personData.profile_path"
+          [alt]="personData.name"
+        />
+      } @else {
+        <p>Sin foto disponible</p>
+      }
+
+      <div>
+        <h1>{{ personData.name }}</h1>
+        <p>Origen: {{ personData.place_of_birth || 'No especificado' }}</p>
+        <p>Biografía: {{ personData.biography || 'Biografía no disponible por el momento.' }}</p>
+      </div>
+    </section>
+
+    <section class="person-filmography">
+      <h2>Películas en las que participó</h2>
+      @if (castMovies().length > 0) {
+        <div>
+          @for (movie of castMovies().slice(0, castLimit()); track movie.id) {
+            <app-movie-card [movieData]="movie" />
+          }
+        </div>
+
+        @if (castMovies().length > castLimit()) {
+          <button type="button" (click)="showMoreCast()">Mostrar más</button>
+        }
+      } @else {
+        <p>No hay películas en el reparto disponibles.</p>
+      }
+
+      <h2>Películas dirigidas</h2>
+      @if (directedMovies().length > 0) {
+        <div>
+          @for (movie of directedMovies().slice(0, directedLimit()); track movie.id) {
+            <app-movie-card [movieData]="movie" />
+          }
+        </div>
+
+        @if (directedMovies().length > directedLimit()) {
+          <button type="button" (click)="showMoreDirected()">Mostrar más</button>
+        }
+      } @else {
+        <p>No hay películas dirigidas disponibles.</p>
+      }
+    </section>
+  } @else {
+    <p>Cargando información...</p>
+  }
+}

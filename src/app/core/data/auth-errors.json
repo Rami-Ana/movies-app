@@ -1,0 +1,11 @@
+{
+  "auth/email-already-in-use": "Ya existe una cuenta con ese correo.",
+  "auth/invalid-email": "El correo no es válido.",
+  "auth/weak-password": "La contraseña es demasiado débil.",
+
+  "auth/invalid-credential": "Correo o contraseña incorrectos.",
+  "auth/too-many-requests": "Demasiados intentos. Espera unos minutos.",
+
+  "auth/network-request-failed": "No hay conexión.",
+  "default": "Ha ocurrido un error inesperado."
+}
