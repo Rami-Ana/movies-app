@@ -1,39 +1,75 @@
-<h1>Mi perfil</h1>
+<section class="auth-page">
+    <div class="auth-card">
+        <div class="auth-banner">
+            <h1 class="auth-title">MI PERFIL</h1>
+        </div>
 
-@if (user()) {
-<p><strong>Correo: </strong>{{ user()?.email }}</p>
-<p><strong>Nombre: </strong>{{ user()?.displayName || 'Sin nombre' }}</p>
-<p><strong>Fecha de alta: </strong>
-    {{user()?.metadata?.creationTime | date:'dd/MM/yyyy'}}</p>
-<hr>
+        @if (user()) {
+        <div class="profile-info">
+            <p class="profile-row">
+                <strong class="profile-label">Correo: </strong>
+                <span>{{ user()?.email }}</span>
+            </p>
+            <p class="profile-row">
+                <strong class="profile-label">Nombre: </strong>
+                <span>{{ user()?.displayName || 'Sin nombre' }}</span>
+            </p>
+            <p class="profile-row">
+                <strong class="profile-label">Fecha de alta: </strong>
+                <span>{{ user()?.metadata?.creationTime | date:'dd/MM/yyyy' }}</span>
+            </p>
+        </div>
 
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+        <form class="auth-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="auth-field">
+                <input id="displayName" class="auth-input" type="text" formControlName="displayName"
+                    placeholder="Nombre de usuario" aria-label="Nombre de usuario"
+                    aria-describedby="displayName-required-error displayName-blank-error displayName-maxlength-error"
+                    [attr.aria-invalid]="submitted && profileForm.controls.displayName.invalid" />
 
-    <label for="displayName">Nombre de usuario</label>
+                @if (submitted && profileForm.controls.displayName.hasError('required')) {
+                <p id="displayName-required-error" class="auth-error-text" role="alert">
+                    El nombre es obligatorio.
+                </p>
+                }
 
-    <input id="displayName" type="text" formControlName="displayName"
-        aria-describedby="displayName-required-error displayName-blank-error displayName-maxlength-error"
-        [attr.aria-invalid]="submitted && profileForm.controls.displayName.invalid">
+                @if (submitted && profileForm.controls.displayName.hasError('blank')) {
+                <p id="displayName-blank-error" class="auth-error-text" role="alert">
+                    El nombre no puede contener solo espacios.
+                </p>
+                }
 
-    @if (submitted && profileForm.controls.displayName.hasError('required')) {
-    <p id="displayName-required-error" role="alert">El nombre es obligatorio.</p>
-    }
-    @if (submitted && profileForm.controls.displayName.hasError('blank')) {
-    <p id="displayName-blank-error" role="alert">El nombre no puede contener solo espacios.</p>
-    }
-    @if (submitted && profileForm.controls.displayName.hasError('maxlength')) {
-    <p id="displayName-maxlength-error" role="alert">Máximo 50 caracteres.</p>
-    }
+                @if (submitted && profileForm.controls.displayName.hasError('maxlength')) {
+                <p id="displayName-maxlength-error" class="auth-error-text" role="alert">
+                    Máximo 50 caracteres.
+                </p>
+                }
+            </div>
 
-    <button type="submit" [disabled]="submitting()">
-        @if (submitting()) { Guardando...} @else { Guardar cambios}
-    </button>
+            <button class="auth-submit-btn" type="submit" [disabled]="submitting()">
+                @if (submitting()) {
+                Guardando...
+                } @else {
+                Guardar cambios
+                }
+            </button>
+        </form>
 
-</form>
+        @if (successMessage()) {
+        <div role="status" class="profile-success">
+            {{ successMessage() }}
+        </div>
+        }
 
-@if (successMessage()) {<div role="status">{{ successMessage() }}</div>}
-@if (errorMessage()) {<div role="alert">{{ errorMessage() }}</div>}
+        @if (errorMessage()) {
+        <div role="alert" class="auth-global-error">
+            {{ errorMessage() }}
+        </div>
+        }
 
-  <hr>
-  <button type="button" (click)="logout()">Cerrar sesión</button>
-}
+        <button type="button" class="profile-logout-btn" (click)="logout()">
+            Cerrar sesión
+        </button>
+        }
+    </div>
+</section>
