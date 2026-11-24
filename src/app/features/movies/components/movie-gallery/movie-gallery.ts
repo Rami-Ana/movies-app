@@ -5,7 +5,7 @@ import { ModelGenre } from '../../../../models/genre-model';
 import { SortOrder } from '../../../../models/sort-order-model';
 import { ActivatedRoute } from '@angular/router';
 import { ModelMovie } from '../../../../models/movie-model';
-import { Subscription } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../../../core/services/movie-service';
 import { GenreService } from '../../../../core/services/genre-service';
 
@@ -15,7 +15,6 @@ import { GenreService } from '../../../../core/services/genre-service';
   styleUrl: './movie-gallery.css',
   templateUrl: './movie-gallery.html',
 })
-
 export class MovieGallery {
   private movieService = inject(MovieService);
   private genreService = inject(GenreService);
@@ -23,7 +22,7 @@ export class MovieGallery {
 
   genres = signal<ModelGenre[]>([]);
 
-  //Gestion estado de filtros:
+  // Gestión estado de filtros:
   selectedGenre = signal<number | null>(null);
   minimumVote = signal<number | null>(null);
   sortOrder = signal<SortOrder>('popularity');
@@ -33,53 +32,60 @@ export class MovieGallery {
   query = signal('');
   status = signal<'loading' | 'error' | 'succes'>('loading');
 
-  // Guarda la petición en curso para poder cancelarla si llega otra
-  private moviesRequest?: Subscription;
-
-
   ngOnInit(): void {
     this.loadGenres(); // Cargar datos auxiliares para filtros.
 
-    this.route.queryParamMap.subscribe((params) => { // Sincroniz navegación
-      this.query.set((params.get('q') ?? '').trim());
-      this.loadMovies(); // Obtener películas populares o por búsqueda.
-    });
-  }
+    this.route.queryParamMap
+      .pipe(
+        //  Extrae ?q= de la URL y limpia espacios
+        map((params) => (params.get('q') ?? '').trim()),
 
+        // Espera 350 ms tras el último cambio para no pedir por cada tecla
+        debounceTime(350),
 
-  private loadMovies(): void {
-    this.moviesRequest?.unsubscribe(); // cancela la petición  si sigue en curso
+        // Si el texto resultante es igual al anterior, no repite la búsqueda
+        distinctUntilChanged(),
 
-   this.status.set('loading');
+        //  Guarda la búsqueda actual y marca estado de carga antes de pedir
+        tap((cleanQuery) => {
+          this.query.set(cleanQuery);
+          this.status.set('loading');
+        }),
 
-    const request =
-      this.query().length < 2
-        ? this.movieService.getPopularMovies()
-        : this.movieService.searchMovies(this.query());
+        //  Lanza la petición y cancela automáticamente la anterior si llega otra
+        switchMap((cleanQuery) => {
+          const request$ =
+            cleanQuery.length < 2
+              ? this.movieService.getPopularMovies()
+              : this.movieService.searchMovies(cleanQuery);
 
-
-    this.moviesRequest = request.subscribe({
-      next: (response) => {
+          return request$.pipe(
+            catchError(() => {
+              this.status.set('error');
+              return of({ results: [] });
+            }),
+          );
+        }),
+      )
+      .subscribe((response) => {
         this.movies.set(response.results);
-        this.status.set('succes');
-      },
-      error: () => {
-        this.movies.set([]);
-        this.status.set('error');
-      },
-    });
+        if (this.status() !== 'error') {
+          this.status.set('succes');
+        }
+      });
   }
 
   private loadGenres(): void {
     this.genreService.getGenres().subscribe({
-      next: (response) => { this.genres.set(response.genres); },
+      next: (response) => {
+        this.genres.set(response.genres);
+      },
       error: () => this.genres.set([]),
       // sin géneros el filtro queda vacío, pero la galería sigue funcionando
     });
   }
 
-
-  //Aplicar filtros: Transformar la lista de películas.
+  // Aplicar filtros: Transformar la lista de películas.
   filteredMovies = computed(() => {
     let filtered = this.movies();
     const genre = this.selectedGenre();
@@ -96,7 +102,7 @@ export class MovieGallery {
       );
     }
 
-    //Orden de visualización:
+    // Orden de visualización:
     switch (sortOrder) {
       case 'popularity':
         return [...filtered].sort((a, b) => b.popularity - a.popularity);
@@ -124,5 +130,4 @@ export class MovieGallery {
   onSortOrderChange(order: SortOrder): void {
     this.sortOrder.set(order);
   }
-
 }
