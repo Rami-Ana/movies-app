@@ -1,106 +1,116 @@
 @if (isLoading()) {
-<section class="skeleton-detail" aria-busy="true" aria-label="Cargando detalle de película"></section>
+  <section class="skeleton-detail" aria-busy="true" aria-label="Cargando detalle de película">
+    <p class="loading-text">Cargando película...</p>
+  </section>
 } @else if (notFound()) {
-<app-not-found-page />
+  <app-not-found-page />
 } @else if (error()) {
-<section class="error-state" aria-live="polite">
-    <p>No se ha podido cargar la película. Revisa tu conexión e inténtalo de nuevo.</p>
-    
-    <button type="button" (click)="retry()">Reintentar</button>
-</section>
+  <section class="error-state" aria-live="polite">
+    <p class="error-text">No se ha podido cargar la película. Revisa tu conexión e inténtalo de nuevo.</p>
+    <button class="btn-retry" type="button" (click)="retry()">Reintentar</button>
+  </section>
 } @else if (movie(); as peli) {
-<section class="movie-detail">
+  <section class="movie-detail">
     @if (peli.poster) {
-    <img [src]="peli.poster" [alt]="peli.title" />
+      <img class="movie-poster" [src]="peli.poster" [alt]="peli.title" />
     }
 
     <div class="movie-info">
-        <h1>{{ peli.title }}</h1>
+      <h1 class="movie-title">{{ peli.title }}</h1>
 
-        <button type="button" (click)="onToggleFavorite()" [disabled]="isSavingFavorite()"
-            [attr.aria-pressed]="isFavorite()">
-            @if (isFavorite()) {
-            Quitar de favoritos
-            } @else {
-            Añadir a favoritos
-            }
-        </button>
-
-        @if (favoriteMessage()) {
-        <p role="status">{{ favoriteMessage() }}</p>
-        }
-
-        @if (peli.tagline) {
-        <p>{{ peli.tagline }}</p>
-        }
-
-        <p>
-            Año: {{ peli.releaseDate.slice(0, 4) }}
-            @if (peli.runtime) {
-            - Duración: {{ peli.runtime }} min
-            }
-            - Nota: {{ peli.rating }}
-        </p>
-
-        @if (peli.genres.length > 0) {
-        <ul>
-            @for (genre of peli.genres; track genre.id) {
-            <li>{{ genre.name }}</li>
-            }
-        </ul>
-        }
-
-        <h2>Sinopsis</h2>
-        <p>{{ peli.overview }}</p>
-
-        @if (peli.directors.length > 0) {
-        <h2>Dirección</h2>
-        <ul>
-            @for (director of peli.directors; track director.id) {
-            <li>
-                <a [routerLink]="['/person', director.id]">{{ director.name }}</a>
-            </li>
-            }
-        </ul>
-        }
-
-        <h2>Dónde verla en España</h2>
-        @if (peli.platforms.length > 0) {
-        <ul>
-            @for (platform of peli.platforms; track platform.id) {
-            <li>
-                @if (platform.logo) {
-                <img [src]="platform.logo" [alt]="platform.name" />
-                }
-                <span>{{ platform.name }}</span>
-            </li>
-            }
-        </ul>
-        <p>Datos de JustWatch</p>
+      <button
+        class="btn-favorite"
+        type="button"
+        (click)="onToggleFavorite()"
+        [disabled]="isSavingFavorite()"
+        [attr.aria-pressed]="isFavorite()"
+      >
+        @if (isFavorite()) {
+          Quitar de favoritos
         } @else {
-        <p>No disponible en plataformas</p>
+          Añadir a favoritos
         }
+      </button>
 
-        @if (peli.trailerKey) {
-        <h2>Tráiler</h2>
+      @if (favoriteMessage()) {
+        <p class="favorite-message" role="status">{{ favoriteMessage() }}</p>
+      }
+
+      @if (peli.tagline) {
+        <p class="movie-tagline">{{ peli.tagline }}</p>
+      }
+
+      <p class="movie-meta">
+        Año: {{ peli.releaseDate.slice(0, 4) }}
+        @if (peli.runtime) {
+          - Duración: {{ peli.runtime }} min
+        }
+        - Nota: {{ peli.rating }}
+      </p>
+
+      @if (peli.genres.length > 0) {
+        <ul class="genre-list">
+          @for (genre of peli.genres; track genre.id) {
+            <li class="genre-badge">{{ genre.name }}</li>
+          }
+        </ul>
+      }
+
+      <h2 class="section-subtitle">Sinopsis</h2>
+      <p class="movie-overview">{{ peli.overview }}</p>
+
+      @if (peli.directors.length > 0) {
+        <h2 class="section-subtitle">Dirección</h2>
+        <ul class="director-list">
+          @for (director of peli.directors; track director.id) {
+            <li class="director-item">
+              <a class="director-link" [routerLink]="['/person', director.id]">{{ director.name }}</a>
+            </li>
+          }
+        </ul>
+      }
+
+      <h2 class="section-subtitle">Dónde verla en España</h2>
+      @if (peli.platforms.length > 0) {
+        <ul class="platform-list">
+          @for (platform of peli.platforms; track platform.id) {
+            <li class="platform-item">
+              @if (platform.logo) {
+                <img class="platform-logo" [src]="platform.logo" [alt]="platform.name" />
+              }
+              <span class="platform-name">{{ platform.name }}</span>
+            </li>
+          }
+        </ul>
+        <p class="platform-source">Datos de JustWatch</p>
+      } @else {
+        <p class="empty-platforms">No disponible en plataformas</p>
+      }
+
+      @if (peli.trailerKey) {
+        <h2 class="section-subtitle">Tráiler</h2>
         @if (!showTrailer()) {
-        <button type="button" (click)="showTrailer.set(true)">Ver tráiler</button>
+          <button class="btn-trailer" type="button" (click)="showTrailer.set(true)">Ver tráiler</button>
         } @else {
-        <button type="button" (click)="showTrailer.set(false)">Cerrar tráiler</button>
-        <iframe [src]="getSafeTrailerUrl(peli.trailerKey)" [title]="'Tráiler de ' + peli.title"
+          <button class="btn-trailer" type="button" (click)="showTrailer.set(false)">Cerrar tráiler</button>
+          <iframe
+            class="trailer-frame"
+            [src]="getSafeTrailerUrl(peli.trailerKey)"
+            [title]="'Tráiler de ' + peli.title"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+            allowfullscreen
+          ></iframe>
         }
-        }
+      }
 
-        @if (peli.cast.length > 0) {
-        <h2>Reparto principal</h2>
+      @if (peli.cast.length > 0) {
+        <h2 class="section-subtitle">Reparto principal</h2>
         <div class="cast-list">
-            @for (actor of peli.cast; track actor.id) {
+          @for (actor of peli.cast; track actor.id) {
             <app-actor-card [actor]="actor" />
-            }
+          }
         </div>
-        }
+      }
     </div>
-</section>
+  </section>
 }

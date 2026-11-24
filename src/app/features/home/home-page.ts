@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home-page.html',
 })
 export class HomePage {
-  title = "Bienvenido";
+  title = "Movies";
   subtitle = "Descubre, explora y gestiona tus películas favoritas en un solo lugar.";
   buttonHome = "Explorar películas"
 }
