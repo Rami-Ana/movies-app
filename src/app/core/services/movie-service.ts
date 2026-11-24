@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ModelPaginationResponse } from '../../models/pagination-model';
 import { ModelMovieDetail, ModelVideoResponse, ModelPlatformResponse } from '../../models/movie-detail-model';
 import { ModelCredits } from '../../models/credits-model';
 import { ModelPersonDetail, ModelPersonCredits } from '../../models/person-model';
-import { moviesMock } from '../../mocks/movies-mock';
 
 @Injectable({
     providedIn: 'root',
@@ -16,20 +15,18 @@ export class MovieService {
     private baseUrl = 'https://api.themoviedb.org/3';
     private apiKey = environment.tmdbApiKey;
 
-    // devuelve pelis populares. Por ahora usa datos de prueba.
-    getPopularMovies(): Observable<ModelPaginationResponse> {
-        return of(moviesMock);
+    // Trae películas populares desde la API real de TMDB con paginación
+    getPopularMovies(page: number = 1): Observable<ModelPaginationResponse> {
+        return this.http.get<ModelPaginationResponse>(
+            `${this.baseUrl}/movie/popular?api_key=${this.apiKey}&language=es-ES&page=${page}`
+        );
     }
 
-    // Busca películas por título dentro de los datos de prueba
-    searchMovies(query: string): Observable<ModelPaginationResponse> {
-        // Filtra la lista y guarda solo las películas cuyo título contiene lo que escribio el usuario
-        const filteredMovies = moviesMock.results.filter((movie) =>
-            movie.title.toLowerCase().includes(query.toLowerCase())
+    // Busca películas por título en la API real de TMDB con paginación
+    searchMovies(query: string, page: number = 1): Observable<ModelPaginationResponse> {
+        return this.http.get<ModelPaginationResponse>(
+            `${this.baseUrl}/search/movie?api_key=${this.apiKey}&language=es-ES&query=${encodeURIComponent(query)}&page=${page}`
         );
-
-        // Devuelve el mismo formato de respuesta, solo con las películas filtradas
-        return of({ ...moviesMock, results: filteredMovies });
     }
 
     // para traer los datos reales de las pantallas de detalle:
