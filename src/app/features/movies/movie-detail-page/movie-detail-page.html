@@ -1,7 +1,13 @@
-@if (id() === null) {
+@if (isLoading()) {
+<section class="skeleton-detail" aria-busy="true" aria-label="Cargando detalle de película"></section>
+} @else if (notFound()) {
 <app-not-found-page />
-} @else {
-@if (movie(); as peli) {
+} @else if (error()) {
+<section class="error-state" aria-live="polite">
+    <p>No se ha podido cargar la película. Revisa tu conexión e inténtalo de nuevo.</p>
+    <button type="button" (click)="retry()">Reintentar</button>
+</section>
+} @else if (movie(); as peli) {
 <section class="movie-detail">
     @if (peli.poster) {
     <img [src]="peli.poster" [alt]="peli.title" />
@@ -19,9 +25,9 @@
         <p>
             Año: {{ peli.releaseDate.slice(0, 4) }}
             @if (peli.runtime) {
-- Duración: {{ peli.runtime }} min
+            - Duración: {{ peli.runtime }} min
             }
-- Nota: {{ peli.rating }}
+            - Nota: {{ peli.rating }}
         </p>
 
         @if (peli.genres.length > 0) {
@@ -80,7 +86,7 @@
 
         @if (peli.cast.length > 0) {
         <h2>Reparto principal</h2>
-        <div>
+        <div class="cast-list">
             @for (actor of peli.cast; track actor.id) {
             <app-actor-card [actor]="actor" />
             }
@@ -88,7 +94,4 @@
         }
     </div>
 </section>
-} @else {
-<p>Cargando película...</p>
-}
 }
