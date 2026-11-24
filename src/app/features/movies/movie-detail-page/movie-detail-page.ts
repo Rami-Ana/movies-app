@@ -5,6 +5,8 @@ import { NotFoundPage } from '../../not-found/not-found-page';
 import { ModelMovie } from '../../../models/movie-detail-model';
 import { ActorCard } from '../components/actor-card/actor-card';
 import { MovieService } from '../../../core/services/movie-service';
+import { UserFavoritesService } from '../../../core/services/user-favorites-service';
+import { AuthService } from '../../../core/services/auth-service';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -16,6 +18,8 @@ import { forkJoin } from 'rxjs';
 export class MovieDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
+  private userFavoritesService = inject(UserFavoritesService);
+  private authService = inject(AuthService);
   private titleService = inject(Title);
   private sanitizer = inject(DomSanitizer);
 
@@ -23,9 +27,15 @@ export class MovieDetailPage implements OnInit {
   movie = signal<ModelMovie | null>(null);
   showTrailer = signal<boolean>(false);
 
+  isFavorite = signal<boolean>(false);
+  isSavingFavorite = signal<boolean>(false);
+  favoriteMessage = signal<string | null>(null);
+
   isLoading = signal<boolean>(false);
   notFound = signal<boolean>(false);
   error = signal<boolean>(false);
+
+  readonly currentUser = this.authService.user;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -34,6 +44,8 @@ export class MovieDetailPage implements OnInit {
 
       this.showTrailer.set(false);
       this.movie.set(null);
+      this.isFavorite.set(false);
+      this.favoriteMessage.set(null);
       this.notFound.set(false);
       this.error.set(false);
 
@@ -55,6 +67,45 @@ export class MovieDetailPage implements OnInit {
     }
   }
 
+  async onToggleFavorite(): Promise<void> {
+    const currentMovie = this.movie();
+    if (!currentMovie || this.isSavingFavorite()) {
+      return;
+    }
+
+    if (!this.currentUser()) {
+      this.favoriteMessage.set('Inicia sesión para guardar películas en favoritos.');
+      return;
+    }
+
+    this.favoriteMessage.set(null);
+    this.isSavingFavorite.set(true);
+
+    try {
+      const updatedState = await this.userFavoritesService.toggleFavorite({
+        id: currentMovie.id,
+        title: currentMovie.title,
+        poster_path: currentMovie.poster,
+      });
+      this.isFavorite.set(updatedState);
+    } catch (err) {
+      console.error('Error al actualizar favorito:', err);
+      this.favoriteMessage.set('No se pudo actualizar el favorito. Inténtalo de nuevo.');
+    } finally {
+      this.isSavingFavorite.set(false);
+    }
+  }
+
+  private async checkFavoriteStatus(numericId: number): Promise<void> {
+    try {
+      const fav = await this.userFavoritesService.isFavorite(numericId);
+      this.isFavorite.set(fav);
+    } catch (err) {
+      console.error('Error al comprobar favorito:', err);
+      this.isFavorite.set(false);
+    }
+  }
+
   private loadMovie(numericId: number): void {
     this.isLoading.set(true);
     this.notFound.set(false);
@@ -66,7 +117,7 @@ export class MovieDetailPage implements OnInit {
       videos: this.movieService.getMovieVideos(numericId),
       platforms: this.movieService.getMoviePlatforms(numericId),
     }).subscribe({
-      next: (respuesta) => {
+      next: async (respuesta) => {
         const directors = respuesta.credits.crew
           .filter((persona) => persona.job === 'Director')
           .map((director) => ({
@@ -117,6 +168,8 @@ export class MovieDetailPage implements OnInit {
 
         this.titleService.setTitle(`${respuesta.details.title} | MoviesApp`);
         this.isLoading.set(false);
+
+        await this.checkFavoriteStatus(numericId);
       },
       error: (err) => {
         console.error('Error al cargar los datos:', err);

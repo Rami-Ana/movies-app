@@ -5,6 +5,7 @@
 } @else if (error()) {
 <section class="error-state" aria-live="polite">
     <p>No se ha podido cargar la película. Revisa tu conexión e inténtalo de nuevo.</p>
+    
     <button type="button" (click)="retry()">Reintentar</button>
 </section>
 } @else if (movie(); as peli) {
@@ -16,7 +17,18 @@
     <div class="movie-info">
         <h1>{{ peli.title }}</h1>
 
-        <!-- EPICA 4: AQUI ESTARA FavoriteButton y RatingInput -->
+        <button type="button" (click)="onToggleFavorite()" [disabled]="isSavingFavorite()"
+            [attr.aria-pressed]="isFavorite()">
+            @if (isFavorite()) {
+            Quitar de favoritos
+            } @else {
+            Añadir a favoritos
+            }
+        </button>
+
+        @if (favoriteMessage()) {
+        <p role="status">{{ favoriteMessage() }}</p>
+        }
 
         @if (peli.tagline) {
         <p>{{ peli.tagline }}</p>
@@ -75,12 +87,9 @@
         <button type="button" (click)="showTrailer.set(true)">Ver tráiler</button>
         } @else {
         <button type="button" (click)="showTrailer.set(false)">Cerrar tráiler</button>
-        <iframe
-            [src]="getSafeTrailerUrl(peli.trailerKey)"
-            [title]="'Tráiler de ' + peli.title"
+        <iframe [src]="getSafeTrailerUrl(peli.trailerKey)" [title]="'Tráiler de ' + peli.title"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-        ></iframe>
+            allowfullscreen></iframe>
         }
         }
 
