@@ -17,21 +17,27 @@ export class UserMoviesService {
     private readonly db = getFirestore(this.app);
 
     private unsubscribeSnapshot: (() => void) | null = null;
+
     private readonly _loaded = signal(false);
     readonly loaded = this._loaded.asReadonly();
 
+    private readonly _entries = signal<UserMovieEntry[]>([]);
+    readonly entries = this._entries.asReadonly();
+
+    private readonly _error = signal<string | null>(null);
+    readonly error = this._error.asReadonly();
+
     constructor() {
         effect(() => {
-            const user =
-                this.authService.user();
+            const user = this.authService.user();
 
             if (!user) {
-
                 this.unsubscribeSnapshot?.();
                 this.unsubscribeSnapshot = null;
 
                 this._entries.set([]);
                 this._loaded.set(false);
+                this._error.set(null);
 
                 return;
             }
@@ -39,23 +45,25 @@ export class UserMoviesService {
             const moviesCollection = collection(this.db, 'users', user.uid, 'movies',);
 
             this.unsubscribeSnapshot?.();
+            this._error.set(null);
+
             this.unsubscribeSnapshot = onSnapshot(
                 moviesCollection,
                 (snapshot) => {
-
                     const entries = snapshot.docs.map(doc => doc.data() as UserMovieEntry,);
 
                     this._entries.set(entries);
+                    this._error.set(null);
                     this._loaded.set(true);
+                },
+                (error) => {
+                    console.error('Error al escuchar las películas del usuario', error);
+                    this._error.set('No se han podido cargar tus películas. Inténtalo de nuevo más tarde.');
+                    this._loaded.set(false);
                 },
             );
         });
     }
-
-    private readonly _entries = signal<UserMovieEntry[]>([]);
-
-    readonly entries = this._entries.asReadonly();
-
 
     private getUserUid(): string {
         const user = this.authService.user();

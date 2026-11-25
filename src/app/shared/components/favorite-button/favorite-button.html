@@ -1,0 +1,10 @@
+
+@if (errorMessage(); as message) {<p role="alert">{{ message }}</p>}
+
+<button type="button" [disabled]="saving()" (click)="toggleFavorite()">
+  @if (isFavorite()) {
+    ❤️
+  } @else {
+    🤍
+  }
+</button>
