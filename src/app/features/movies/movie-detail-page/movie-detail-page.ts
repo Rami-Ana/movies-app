@@ -5,7 +5,8 @@ import { NotFoundPage } from '../../not-found/not-found-page';
 import { ModelMovie } from '../../../models/movie-detail-model';
 import { ActorCard } from '../components/actor-card/actor-card';
 import { MovieService } from '../../../core/services/movie-service';
-import { UserFavoritesService } from '../../../core/services/user-favorites-service';
+import { UserMoviesService } from '../../../core/services/user-movies-service';
+import { ModelMovie as MovieSummaryModel } from '../../../models/movie-model';
 import { AuthService } from '../../../core/services/auth-service';
 import { forkJoin } from 'rxjs';
 
@@ -18,7 +19,7 @@ import { forkJoin } from 'rxjs';
 export class MovieDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
-  private userFavoritesService = inject(UserFavoritesService);
+  private userMoviesService = inject(UserMoviesService);
   private authService = inject(AuthService);
   private titleService = inject(Title);
   private sanitizer = inject(DomSanitizer);
@@ -82,12 +83,21 @@ export class MovieDetailPage implements OnInit {
     this.isSavingFavorite.set(true);
 
     try {
-      const updatedState = await this.userFavoritesService.toggleFavorite({
+      const nextFavoriteState = !this.isFavorite();
+
+      const movieData: MovieSummaryModel = {
         id: currentMovie.id,
         title: currentMovie.title,
         poster_path: currentMovie.poster,
-      });
-      this.isFavorite.set(updatedState);
+        release_date: currentMovie.releaseDate ?? '',
+        vote_average: currentMovie.rating ?? 0,
+        popularity: 0,
+        overview: currentMovie.overview ?? '',
+        genre_ids: currentMovie.genres.map((g) => g.id),
+      };
+
+      await this.userMoviesService.save(movieData, { isFavorite: nextFavoriteState });
+      this.isFavorite.set(nextFavoriteState);
     } catch (err) {
       console.error('Error al actualizar favorito:', err);
       this.favoriteMessage.set('No se pudo actualizar el favorito. Inténtalo de nuevo.');
@@ -98,7 +108,7 @@ export class MovieDetailPage implements OnInit {
 
   private async checkFavoriteStatus(numericId: number): Promise<void> {
     try {
-      const fav = await this.userFavoritesService.isFavorite(numericId);
+      const fav = this.userMoviesService.isFavorite(numericId);
       this.isFavorite.set(fav);
     } catch (err) {
       console.error('Error al comprobar favorito:', err);
