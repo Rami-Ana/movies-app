@@ -46,6 +46,12 @@
                 }
             </div>
 
+            @if (successMessage()) {
+            <p role="status" class="profile-success">
+                {{ successMessage() }}
+            </p>
+            }
+
             <button class="auth-submit-btn" type="submit" [disabled]="submitting()">
                 @if (submitting()) {
                 Guardando...
@@ -54,12 +60,6 @@
                 }
             </button>
         </form>
-
-        @if (successMessage()) {
-        <div role="status" class="profile-success">
-            {{ successMessage() }}
-        </div>
-        }
 
         @if (errorMessage()) {
         <div role="alert" class="auth-global-error">
