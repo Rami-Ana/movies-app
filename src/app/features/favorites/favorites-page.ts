@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { UserMoviesService } from '../../core/services/user-movies-service';
 import { RouterLink } from '@angular/router';
 import { TmdbImagePipe } from '../../shared/pipes/tmdb-image-pipe';
-import { ModelMovie } from '../../models/movie-model';
 
 @Component({
   imports: [RouterLink, TmdbImagePipe],
@@ -12,24 +11,10 @@ import { ModelMovie } from '../../models/movie-model';
 })
 export class FavoritesPage {
   private userMoviesService = inject(UserMoviesService);
-  
-  readonly loaded = this.userMoviesService.loaded;
-  readonly error = this.userMoviesService.error;
-  readonly entries = this.userMoviesService.entries;
-  
-  testMovie: ModelMovie = {
-  id: 1,
-  title: 'Matrix',
-  poster_path: null,
-  release_date: '1999-03-31',
-  vote_average: 8.7,
-  popularity: 100,
-  overview: 'Prueba',
-  genre_ids: [],
-};
 
-  // avisa cuando Firebase terminó de cargar los datos
+  // avisa cuando Firebase terminó de cargar los datos y si hubo error
   isLoaded = this.userMoviesService.loaded;
+  error = this.userMoviesService.error;
 
   // Guarda cómo queremos ordenar ('rating' | 'addedAt' | 'title')
   selectedOrder = signal<'rating' | 'addedAt' | 'title'>('rating');
@@ -40,7 +25,7 @@ export class FavoritesPage {
   // Guarda el mensaje de respuesta para mostrarle al usuario
   responseUserMessage = signal<string | null>(null);
 
-  //Nos quedamos solo con las películas favoritas
+  // Nos quedamos solo con las películas favoritas
   favoriteMovies = computed(() => {
     return this.userMoviesService.entries().filter((movie) => movie.isFavorite === true);
   });
@@ -74,7 +59,6 @@ export class FavoritesPage {
     const select = event.target as HTMLSelectElement;
     this.selectedOrder.set(select.value as 'rating' | 'addedAt' | 'title');
   }
-<<<<<<< HEAD
 
   openRemoveConfirm(movieId: number, event: Event): void {
     event.stopPropagation();
@@ -90,9 +74,5 @@ export class FavoritesPage {
     event.stopPropagation();
     this.confirmingRemoveId.set(null);
     this.responseUserMessage.set(`"${movie.title}" quitada de favoritas (pendiente conectar servicio)`);
-    
   }
 }
-=======
-}
->>>>>>> 452dea2a7a7c87603ed104ca787eb5c37cc6a84e
