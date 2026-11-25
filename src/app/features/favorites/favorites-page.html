@@ -15,14 +15,19 @@
         <a routerLink="/movies">Ir a películas</a>
     </p>
     } @else {
-    <p class="sort-label">Ordenar por:</p>
-    <select class="sort-select" 
-    [value]="selectedOrder()" 
-    (change)="changeOrder($event)">
-        <option value="rating">Mi puntuación</option>
-        <option value="addedAt">Fecha añadida</option>
-        <option value="title">Título</option>
-    </select>
+
+    <div class="favorites-sort">
+        <label for="favorites-order" class="sort-label">
+            Ordenar por:
+        </label>
+
+        <select id="favorites-order" class="sort-select" [value]="selectedOrder()" (change)="changeOrder($event)">
+            <option value="rating">Mi puntuación</option>
+            <option value="addedAt">Fecha añadida</option>
+            <option value="title">Título</option>
+        </select>
+    </div>
+
 
     <ul class="favorites-list">
         @for (movie of orderedFavorites(); track movie.movieId) {
@@ -57,12 +62,8 @@
                 <p>Tu puntuación (1 a 10)</p>
                 <div class="rating-grid">
                     @for (num of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track num) {
-                    <button
-                        type="button"
-                        class="rating-btn"
-                        [class.active-rating]="movie.rating === num"
-                        (click)="setRating(movie, num, $event)"
-                    >
+                    <button type="button" class="rating-btn" [class.active-rating]="movie.rating === num"
+                        (click)="setRating(movie, num, $event)">
                         {{ num }}
                     </button>
                     }

@@ -1,5 +1,8 @@
+
 <form role="search" class="search-bar" (submit)="$event.preventDefault()">
-  <label for="search-input" class="sr-only">Buscar películas</label>
+  <label for="search-input" class="sr-only">
+    Buscar películas
+  </label>
 
   <div class="search-input-wrapper">
     <input
@@ -13,7 +16,9 @@
     />
   </div>
 
-  <p id="search-help" class="search-bar-help">
-    Escribe al menos 2 letras para buscar.
-  </p>
+  <div class="search-status">
+    <p id="search-help" class="search-bar-help">
+      Escribe al menos 2 letras para buscar.
+    </p>
+  </div>
 </form>
