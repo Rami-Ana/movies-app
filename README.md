@@ -76,117 +76,111 @@ main
 
 ## Architecture
 ```
-src/app/
-│
-├── core/ 
-│   ├── data/
-│   │     └── auth-errors.json
-│   │ 
-│   ├── services/
-│   │     ├── auth-service.ts  
-│   │     ├── genre-service.ts  
-│   │     └── movie-service.ts  
-│   │ 
-│   ├── (NOT YET) guards/
-│   ├── (NOT YET) interceptors/
-│   └── (NOT YET) constants/
-│
-├── shared/  
-│   ├── components/
-│   │      ├── header-component/
-│   │      └── footer-component/
-│   ├── pipes/
-│   │      └── tmdb-image-pipe.ts
-│   ├── (NOT YET) directives/
-│   └── (NOT YET) ui/
-│
-├── models/
-│   ├── pagination-model.ts
-│   ├── genre-model.ts
-│   ├── movie-model.ts
-│   ├── sort-order-model.ts
-│   ├── (NOT YET) movie-detail-model.ts 
-│   ├── (NOT YET) person-model.ts
-│   └── (NOT YET) credits-model.ts
-│
-├── features/  → una carpeta por funcionalidad; las páginas van sueltas dentro de su feature
+```text
+main
+└── develop
+    ├── feature/hu-1-2-movies-list
+    ├── feature/hu-1-3-search
+    ├── feature/hu-1-4-filters
+    ├── feature/hu-1-5-pagination
+    ├── feature/hu-1-6-api-connexion
+    ├── feature/hu-2-1-detail-routes
+    ├── feature/hu-2-2-detail-service
+    ├── feature/hu-2-3-movie-detail
+    ├── feature/hu-2-4-person-detail
+    ├── feature/hu-2-5-detail-navigation
+    ├── feature/hu-3-1-register
+    ├── feature/hu-3-2-login-logout
+    ├── feature/hu-3-3-guards
+    ├── feature/hu-3-4-profile
+    ├── feature/hu-4-1-user-movies-persistence
+    ├── feature/hu-4-2-favorite-button
+    ├── feature/hu-4-3-rating
+    ├── feat/user-favorites-service
+    ├── refactor/movie-gallery-state
+    └── fix/movie-images-and-pagination
+```
+
+## Architecture
+```text
+public/
+src/
+├── app/
+│   ├── core/
+│   │   ├── data/
+│   │   │     └── auth-errors.json
+│   │   ├── guards/
+│   │   │     ├── auth-guard.ts
+│   │   │     └── guest-guard.ts
+│   │   ├── services/
+│   │   │     ├── auth-service.ts
+│   │   │     ├── genre-service.ts
+│   │   │     ├── movie-service.ts
+│   │   │     ├── user-favorites-service.ts
+│   │   │     └── user-movies-service.ts
+│   │   └── utils/
 │   │
-│   ├── auth/
-│   │     └── components
-│   │           ├── register/
-│   │           ├── login/
-│   │           ├── (NOT YET) pages/
-│   │           └── models/
-│   │                  └── auth-model.ts/
-│   │
-│   ├── home/ 
-│   │      └── home-page
-│   │
-│   ├── movies/
-│   │      ├── movies-page
-│   │      ├── movie-detail-page
-│   │      └── components/
-│   │           ├── movie-card
-│   │           ├── movie-gallery
-│   │           ├── movie-filters
-│   │           └── search-bar
-│   │
-│   ├── people/ 
-│   │     └── person-detail-page
-│   │
-│   ├── features/            → una carpeta por funcionalidad; las páginas van dentro de su feature
-│   │   ├── home/
-│   │   │     └── home-page
-│   │   │
-│   │   ├── movies/
-│   │   │   ├── movies-page
-│   │   │   ├── movie-detail-page
-│   │   │   └── components/
-│   │   │        ├── movie-card
-│   │   │        ├── movie-gallery
-│   │   │        ├── movie-filters
-│   │   │        └── search-bar
-│   │   │
-│   │   ├── people/            → actor y director
-│   │   │     └── person-detail-page
-│   │   │
-│   │   ├── not-found/
-│   │   │     └── not-found-page
-│   │   │
-│   │   ├── favorites/
-│   │   │     ├── pages/
-│   │   │     ├── components/
-│   │   │     └── models/            (favorito + puntuación)
-│   │   │           └── fav-model.ts
-│   │   │
-│   │   ├── profile/
-│   │   │
+│   ├── features/
 │   │   ├── auth/
-│   │   │     ├── pages/
+│   │   │     └── components/
+│   │   │           ├── login/
+│   │   │           └── register/
+│   │   ├── favorites/
+│   │   │     └── favorites-page.*
+│   │   ├── home/
+│   │   │     └── home-page.*
+│   │   ├── movies/
 │   │   │     ├── components/
-│   │   │     └── models/            (modelos exclusivos de auth)
-│   │   │           └── auth-model.ts
-│   │   │
-│   │   └── stats/
+│   │   │     │     ├── actor-card/
+│   │   │     │     ├── movie-card/
+│   │   │     │     ├── movie-filters/
+│   │   │     │     ├── movie-gallery/
+│   │   │     │     └── search-bar/
+│   │   │     ├── movie-detail-page/
+│   │   │     └── movies-page.*
+│   │   ├── not-found/
+│   │   │     └── not-found-page.*
+│   │   ├── people/
+│   │   │     └── person-detail-page.*
+│   │   └── profile/
+│   │         └── profile-page.*
 │   │
-│   ├── favorites/
-│   │     ├── pages/
-│   │     ├── components/
-│   │     └── models/             
-│   │           └── fav-model.ts
+│   ├── mocks/
+│   │   ├── credits-mock.ts
+│   │   ├── genre-mock.ts
+│   │   ├── movie-detail-mock.ts
+│   │   ├── movies-mock.ts
+│   │   └── person-detail-mock.ts
 │   │
-│   ├── profile/
-│   └── (NOT YET)stats/
+│   ├── models/
+│   │   ├── credits-model.ts
+│   │   ├── genre-model.ts
+│   │   ├── movie-detail-model.ts
+│   │   ├── movie-model.ts
+│   │   ├── pagination-model.ts
+│   │   ├── person-model.ts
+│   │   ├── sort-order-model.ts
+│   │   └── user-movie-entry.ts
+│   │
+│   ├── shared/
+│   │   ├── components/
+│   │   │     ├── favorite-button/
+│   │   │     ├── footer-component/
+│   │   │     └── header-component/
+│   │   └── pipes/
+│   │         └── tmdb-image-pipe.ts
+│   │
+│   ├── app.config.ts
+│   ├── app.css
+│   ├── app.html
+│   ├── app.routes.ts
+│   ├── app.spec.ts
+│   └── app.ts
 │
-├── mocks/ (borrable??)
-│   ├── genre-mock.ts
-│   ├── movie-detail-mock.ts
-│   └── movies-mock.ts
-│
-└── environments/  
-    ├── environment.ts              (No disponible en GitHub)
-    ├── environment.development.ts  (No disponible en GitHub)
-    └── environment.example.ts      
+└── environments/
+      ├── environment.ts              # No disponible en GitHub (ignorado en .gitignore)
+      ├── environment.development.ts  # No disponible en GitHub (ignorado en .gitignore)
+      └── environment.example.ts
 ```
 
 ## Features
