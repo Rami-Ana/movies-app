@@ -9,9 +9,10 @@ import { UserMoviesService } from '../../../core/services/user-movies-service';
 import { ModelMovie as MovieSummaryModel } from '../../../models/movie-model';
 import { AuthService } from '../../../core/services/auth-service';
 import { forkJoin } from 'rxjs';
+import { RatingInput } from '../../../shared/components/rating-input/rating-input';
 
 @Component({
-  imports: [NotFoundPage, RouterLink, ActorCard],
+  imports: [NotFoundPage, RouterLink, ActorCard,RatingInput],
   selector: 'app-movie-detail-page',
   styleUrl: './movie-detail-page.css',
   templateUrl: './movie-detail-page.html',
