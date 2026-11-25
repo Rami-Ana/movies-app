@@ -1,7 +1,27 @@
 
-@if (errorMessage(); as message) {<p role="alert">{{ message }}</p>}
+@if (errorMessage(); as message) {
+  <p role="alert">
+    {{ message }}
+  </p>
+}
 
-<button type="button" [disabled]="saving()" (click)="toggleFavorite()">
+@if (successMessage(); as message) {
+  <p aria-live="polite">
+    {{ message }}
+  </p>
+}
+
+<button
+  type="button"
+  [disabled]="saving()"
+  (click)="toggleFavorite()"
+  [attr.aria-pressed]="isFavorite()"
+  [attr.aria-label]="
+    isFavorite()
+      ? 'Quitar ' + movie().title + ' de favoritas'
+      : 'Añadir ' + movie().title + ' a favoritas'
+  "
+>
   @if (isFavorite()) {
     ❤️
   } @else {
