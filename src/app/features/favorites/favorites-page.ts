@@ -18,6 +18,12 @@ export class FavoritesPage {
   // Guarda cómo queremos ordenar ('rating' | 'addedAt' | 'title')
   selectedOrder = signal<'rating' | 'addedAt' | 'title'>('rating');
 
+  // Guarda el ID de la película que tiene abierta la pregunta "¿Seguro?"
+  confirmingRemoveId = signal<number | null>(null);
+
+  // Guarda el mensaje de respuesta para mostrarle al usuario
+  responseUserMessage = signal<string | null>(null);
+
   //Nos quedamos solo con las películas favoritas
   favoriteMovies = computed(() => {
     return this.userMoviesService.entries().filter((movie) => movie.isFavorite === true);
@@ -51,5 +57,22 @@ export class FavoritesPage {
   changeOrder(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedOrder.set(select.value as 'rating' | 'addedAt' | 'title');
+  }
+
+  openRemoveConfirm(movieId: number, event: Event): void {
+    event.stopPropagation();
+    this.confirmingRemoveId.set(movieId);
+  }
+
+  cancelRemoveConfirm(event: Event): void {
+    event.stopPropagation();
+    this.confirmingRemoveId.set(null);
+  }
+
+  confirmRemoveFavorite(movie: { movieId: number; title: string }, event: Event): void {
+    event.stopPropagation();
+    this.confirmingRemoveId.set(null);
+    this.responseUserMessage.set(`"${movie.title}" quitada de favoritas (pendiente conectar servicio)`);
+    
   }
 }

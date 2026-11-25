@@ -1,28 +1,30 @@
 <section class="favorites-page">
     <h1>Mis favoritas</h1>
 
+    @if (responseUserMessage()) {
+    <p class="feedback-banner">{{ responseUserMessage() }}</p>
+    }
+
     @if (!isLoaded()) {
     <p>Cargando...</p>
 
     } @else if (orderedFavorites().length === 0) {
-    <div class="empty-state">
-        <p>Aún no tienes favoritas</p>
+    <p class="empty-state">
+        Aún no tienes favoritas
         <a routerLink="/movies">Ir a películas</a>
-    </div>
+    </p>
 
     } @else {
-    <div class="sort-controls">
-        <p>Ordenar por:</p>
-        <select [value]="selectedOrder()" (change)="changeOrder($event)">
-            <option value="rating">Mi puntuación</option>
-            <option value="addedAt">Fecha añadida</option>
-            <option value="title">Título</option>
-        </select>
-    </div>
+    <p class="sort-label">Ordenar por:</p>
+    <select class="sort-select" [value]="selectedOrder()" (change)="changeOrder($event)">
+        <option value="rating">Mi puntuación</option>
+        <option value="addedAt">Fecha añadida</option>
+        <option value="title">Título</option>
+    </select>
 
-    <div class="favorites-list">
+    <ul class="favorites-list">
         @for (movie of orderedFavorites(); track movie.movieId) {
-        <article class="favorite-card" [routerLink]="['/movie', movie.movieId]">
+        <li class="favorite-card" [routerLink]="['/movie', movie.movieId]">
             <img [src]="movie.poster_path | tmdbImage" [alt]="movie.title" />
 
             @if (selectedOrder() === 'rating' && movie.rating !== null && movie.rating !== undefined) {
@@ -48,8 +50,18 @@
             } @else {
             <p>Nota pública: Sin nota</p>
             }
-        </article>
+
+            @if (confirmingRemoveId() === movie.movieId) {
+            <p>¿Seguro?</p>
+            <button type="button" (click)="confirmRemoveFavorite(movie, $event)">Sí</button>
+            <button type="button" (click)="cancelRemoveConfirm($event)">No</button>
+            } @else {
+            <button type="button" (click)="openRemoveConfirm(movie.movieId, $event)">
+                Quitar de favoritas
+            </button>
+            }
+        </li>
         }
-    </div>
+    </ul>
     }
 </section>
