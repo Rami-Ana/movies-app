@@ -20,6 +20,14 @@
       </label>
     }
   </div>
+  
+  <p class="current-rating">
+    @if (currentRating() !== null) {
+      Tu nota: {{ currentRating() }}/10
+    } @else {
+      Aún no has puntuado esta película
+    }
+  </p>
 
   <button
     type="button"

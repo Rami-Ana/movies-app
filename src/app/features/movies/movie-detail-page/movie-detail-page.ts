@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NotFoundPage } from '../../not-found/not-found-page';
@@ -38,6 +38,11 @@ export class MovieDetailPage implements OnInit {
   error = signal<boolean>(false);
 
   readonly currentUser = this.authService.user;
+
+  readonly ratingMovie = computed<MovieSummaryModel | null>(() => {
+    const currentMovie = this.movie();
+    return currentMovie ? this.toSummaryMovie(currentMovie) : null;
+  });
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -83,19 +88,9 @@ export class MovieDetailPage implements OnInit {
     this.favoriteMessage.set(null);
     this.isSavingFavorite.set(true);
 
-    try {
+try {
       const nextFavoriteState = !this.isFavorite();
-
-      const movieData: MovieSummaryModel = {
-        id: currentMovie.id,
-        title: currentMovie.title,
-        poster_path: currentMovie.poster,
-        release_date: currentMovie.releaseDate ?? '',
-        vote_average: currentMovie.rating ?? 0,
-        popularity: 0,
-        overview: currentMovie.overview ?? '',
-        genre_ids: currentMovie.genres.map((g) => g.id),
-      };
+      const movieData = this.toSummaryMovie(currentMovie);
 
       await this.userMoviesService.save(movieData, { isFavorite: nextFavoriteState });
       this.isFavorite.set(nextFavoriteState);
@@ -105,6 +100,21 @@ export class MovieDetailPage implements OnInit {
     } finally {
       this.isSavingFavorite.set(false);
     }
+  }
+
+  private toSummaryMovie(currentMovie: ModelMovie): MovieSummaryModel {
+    return {
+      id: currentMovie.id,
+      title: currentMovie.title,
+      poster_path: currentMovie.poster
+        ? currentMovie.poster.replace('https://image.tmdb.org/t/p/w500', '')
+        : null,
+      release_date: currentMovie.releaseDate ?? '',
+      vote_average: currentMovie.rating ?? 0,
+      popularity: 0,
+      overview: currentMovie.overview ?? '',
+      genre_ids: currentMovie.genres.map((g) => g.id),
+    };
   }
 
   private async checkFavoriteStatus(numericId: number): Promise<void> {
@@ -123,7 +133,7 @@ export class MovieDetailPage implements OnInit {
     this.error.set(false);
 
     forkJoin({
-      details: this.movieService.getMovieDetails(numericId),
+      details: this.movieService.getMovieDetails (numericId),
       credits: this.movieService.getMovieCredits(numericId),
       videos: this.movieService.getMovieVideos(numericId),
       platforms: this.movieService.getMoviePlatforms(numericId),
