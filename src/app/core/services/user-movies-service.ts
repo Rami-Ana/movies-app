@@ -1,5 +1,5 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { deleteDoc, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { inject, Injectable, signal, effect } from '@angular/core';
+import { deleteDoc, doc, getFirestore, setDoc, onSnapshot, collection } from 'firebase/firestore';
 import { UserMovieEntry } from '../../models/user-movie-entry';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
@@ -15,6 +15,44 @@ export class UserMoviesService {
 
     private readonly app = initializeApp(environment.firebase);
     private readonly db = getFirestore(this.app);
+
+    private unsubscribeSnapshot: (() => void) | null = null;
+    private readonly _loaded = signal(false);
+    readonly loaded = this._loaded.asReadonly();
+
+    constructor() {
+        effect(() => {
+            const user =
+                this.authService.user();
+
+            if (!user) {
+
+                this.unsubscribeSnapshot?.();
+                this.unsubscribeSnapshot = null;
+
+                this._entries.set([]);
+                this._loaded.set(false);
+
+                return;
+            }
+
+            console.log('Escuchando favoritos de:', user.uid,);
+
+            const moviesCollection = collection(this.db, 'users', user.uid, 'movies',);
+
+            this.unsubscribeSnapshot?.();
+            this.unsubscribeSnapshot = onSnapshot(
+                moviesCollection,
+                (snapshot) => {
+
+                    const entries = snapshot.docs.map(doc => doc.data() as UserMovieEntry,);
+
+                    this._entries.set(entries);
+                    this._loaded.set(true);
+                },
+            );
+        });
+    }
 
     private readonly _entries = signal<UserMovieEntry[]>([]);
 
@@ -80,7 +118,7 @@ export class UserMoviesService {
         }
         const movieDoc = this.getMovieDoc(movie.id);
 
-        await setDoc(movieDoc,entry,);
+        await setDoc(movieDoc, entry,);
     }
 
     getEntry(movieId: number,): UserMovieEntry | undefined {
