@@ -1,12 +1,19 @@
 <form role="search" class="search-bar" (submit)="$event.preventDefault()">
-  <label for="search-input">Buscar películas</label>
-  <input #searchInput 
-  id="search-input" 
-  type="search" 
-  name="q" 
-  placeholder="Buscar por título"
-  aria-describedby="search-help"
+  <label for="search-input" class="sr-only">Buscar películas</label>
 
-(input)="startSearch(searchInput.value)" /> <!--cada vez que cambie el texto dentro de caja se activa mi metodo -->
-<p id="search-help" class="search-bar-help">Escribe al menos 2 letras para buscar.</p>
+  <div class="search-input-wrapper">
+    <input
+      #searchInput
+      id="search-input"
+      type="search"
+      name="q"
+      placeholder="Buscar películas..."
+      aria-describedby="search-help"
+      (input)="startSearch(searchInput.value)"
+    />
+  </div>
+
+  <p id="search-help" class="search-bar-help">
+    Escribe al menos 2 letras para buscar.
+  </p>
 </form>
