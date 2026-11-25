@@ -36,8 +36,6 @@ export class UserMoviesService {
                 return;
             }
 
-            console.log('Escuchando favoritos de:', user.uid,);
-
             const moviesCollection = collection(this.db, 'users', user.uid, 'movies',);
 
             this.unsubscribeSnapshot?.();
