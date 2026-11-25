@@ -7,9 +7,7 @@ import { AuthService } from './auth-service';
 import { ModelMovie } from '../../models/movie-model';
 import { shouldDelete } from '../utils/should-delete/should-delete';
 
-
-@Injectable({ providedIn: 'root', })
-
+@Injectable({ providedIn: 'root' })
 export class UserMoviesService {
     private authService = inject(AuthService);
 
@@ -20,13 +18,14 @@ export class UserMoviesService {
     private readonly _loaded = signal(false);
     readonly loaded = this._loaded.asReadonly();
 
+    private readonly _entries = signal<UserMovieEntry[]>([]);
+    readonly entries = this._entries.asReadonly();
+
     constructor() {
         effect(() => {
-            const user =
-                this.authService.user();
+            const user = this.authService.user();
 
             if (!user) {
-
                 this.unsubscribeSnapshot?.();
                 this.unsubscribeSnapshot = null;
 
@@ -36,14 +35,13 @@ export class UserMoviesService {
                 return;
             }
 
-            const moviesCollection = collection(this.db, 'users', user.uid, 'movies',);
+            const moviesCollection = collection(this.db, 'users', user.uid, 'movies');
 
             this.unsubscribeSnapshot?.();
             this.unsubscribeSnapshot = onSnapshot(
                 moviesCollection,
                 (snapshot) => {
-
-                    const entries = snapshot.docs.map(doc => doc.data() as UserMovieEntry,);
+                    const entries = snapshot.docs.map((doc) => doc.data() as UserMovieEntry);
 
                     this._entries.set(entries);
                     this._loaded.set(true);
@@ -52,21 +50,17 @@ export class UserMoviesService {
         });
     }
 
-    private readonly _entries = signal<UserMovieEntry[]>([]);
-
-    readonly entries = this._entries.asReadonly();
-
-
     private getUserUid(): string {
         const user = this.authService.user();
 
         if (!user) {
-            throw new Error('No hay usuario autenticado',);
+            throw new Error('No hay usuario autenticado');
         }
+
         return user.uid;
     }
 
-    private getMovieDoc(movieId: number,) {
+    private getMovieDoc(movieId: number) {
         const uid = this.getUserUid();
 
         return doc(
@@ -78,13 +72,14 @@ export class UserMoviesService {
         );
     }
 
-    async remove(movieId: number,): Promise<void> {
-        const movieDoc =
-            this.getMovieDoc(movieId);
+    async remove(movieId: number): Promise<void> {
+        const movieDoc = this.getMovieDoc(movieId);
         await deleteDoc(movieDoc);
     }
 
-    async save(movie: ModelMovie, changes: Partial<Pick<UserMovieEntry, 'isFavorite' | 'rating'>>,
+    async save(
+        movie: ModelMovie,
+        changes: Partial<Pick<UserMovieEntry, 'isFavorite' | 'rating'>>,
     ): Promise<void> {
         const currentEntry = this.getEntry(movie.id);
 
@@ -94,17 +89,18 @@ export class UserMoviesService {
             poster_path: movie.poster_path,
             release_date: movie.release_date,
             genre_ids: movie.genre_ids,
-
+            vote_average:
+                movie.vote_average ??
+                currentEntry?.vote_average ??
+                null,
             isFavorite:
                 changes.isFavorite ??
                 currentEntry?.isFavorite ??
                 false,
-
             rating:
                 changes.rating ??
                 currentEntry?.rating ??
                 null,
-
             addedAt:
                 currentEntry?.addedAt ??
                 Date.now(),
@@ -114,21 +110,21 @@ export class UserMoviesService {
             await this.remove(movie.id);
             return;
         }
+
         const movieDoc = this.getMovieDoc(movie.id);
 
-        await setDoc(movieDoc, entry,);
+        await setDoc(movieDoc, entry);
     }
 
-    getEntry(movieId: number,): UserMovieEntry | undefined {
-        return this.entries().find(entry => entry.movieId === movieId,);
+    getEntry(movieId: number): UserMovieEntry | undefined {
+        return this.entries().find((entry) => entry.movieId === movieId);
     }
 
-    isFavorite(movieId: number,): boolean {
-        return (this.getEntry(movieId)?.isFavorite ?? false);
+    isFavorite(movieId: number): boolean {
+        return this.getEntry(movieId)?.isFavorite ?? false;
     }
 
-    getRating(movieId: number,): number | null {
-        return (this.getEntry(movieId)?.rating ?? null);
+    getRating(movieId: number): number | null {
+        return this.getEntry(movieId)?.rating ?? null;
     }
 }
-
