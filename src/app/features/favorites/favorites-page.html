@@ -1,1 +1,85 @@
-<p>favorites-page works!</p>
+<section class="favorites-page">
+    <h1>Mis favoritas</h1>
+
+    @if (responseUserMessage()) {
+    <p class="feedback-banner">{{ responseUserMessage() }}</p>
+    }
+
+    @if (error()) {
+    <p role="alert">{{ error() }}</p>
+    } @else if (!isLoaded()) {
+    <p role="status">Cargando tus favoritas...</p>
+    } @else if (orderedFavorites().length === 0) {
+    <p class="empty-state">
+        Aún no tienes favoritas
+        <a routerLink="/movies">Ir a películas</a>
+    </p>
+    } @else {
+    <p class="sort-label">Ordenar por:</p>
+    <select class="sort-select" 
+    [value]="selectedOrder()" 
+    (change)="changeOrder($event)">
+        <option value="rating">Mi puntuación</option>
+        <option value="addedAt">Fecha añadida</option>
+        <option value="title">Título</option>
+    </select>
+
+    <ul class="favorites-list">
+        @for (movie of orderedFavorites(); track movie.movieId) {
+        <li class="favorite-card" [routerLink]="['/movie', movie.movieId]">
+            <img [src]="movie.poster_path | tmdbImage" [alt]="movie.title" />
+
+            @if (selectedOrder() === 'rating' && movie.rating !== null && movie.rating !== undefined) {
+            <p>#{{ $index + 1 }}</p>
+            }
+
+            <h2>{{ movie.title }}</h2>
+
+            @if (movie.release_date) {
+            <p>Año: {{ movie.release_date.slice(0, 4) }}</p>
+            } @else {
+            <p>Año: Sin fecha</p>
+            }
+
+            @if (movie.rating !== null && movie.rating !== undefined) {
+            <p>Mi puntuación: {{ movie.rating }}/10</p>
+            } @else {
+            <p>Mi puntuación: Sin puntuar</p>
+            }
+
+            @if (movie.vote_average !== null && movie.vote_average !== undefined) {
+            <p>Nota pública: {{ movie.vote_average }}</p>
+            } @else {
+            <p>Nota pública: Sin nota</p>
+            }
+
+            <div (click)="$event.stopPropagation()">
+                <p>Tu puntuación (1 a 10)</p>
+                <div class="rating-grid">
+                    @for (num of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track num) {
+                    <button
+                        type="button"
+                        class="rating-btn"
+                        [class.active-rating]="movie.rating === num"
+                        (click)="setRating(movie, num, $event)"
+                    >
+                        {{ num }}
+                    </button>
+                    }
+                </div>
+            </div>
+
+            @if (confirmingRemoveId() === movie.movieId) {
+            <p>¿Seguro?</p>
+            <button type="button" (click)="confirmRemoveFavorite(movie, $event)">Sí</button>
+            <button type="button" (click)="cancelRemoveConfirm($event)">No</button>
+            } @else {
+            <button type="button" (click)="openRemoveConfirm(movie.movieId, $event)">
+                Quitar de favoritas
+            </button>
+            }
+        </li>
+        }
+    </ul>
+    }
+</section>

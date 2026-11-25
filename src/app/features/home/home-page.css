@@ -5,56 +5,82 @@
   min-height: 85vh;
   padding: 1.5rem;
   text-align: center;
-  background-color: #121212; /* Fondo */
+  background-color: #121212;
 }
 
 .welcome-card {
-  max-width: 50rem;
+  max-width: 26rem;
+  width: 100%;
+  min-height: 36rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 1.25rem;
+}
+
+.welcome-title {
+  margin-top: 6rem;
+  padding: 0.4rem 1.25rem;
+  background-color: #262e3a;
+  color: #f5c518;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.welcome-subtitle {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+
+.welcome-actions {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
+  gap: 0.85rem;
+  margin-top: 4rem;
 }
 
-.welcome-card h1 {
-  font-size: 2rem; /* móvil */
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.welcome-card p {
-  font-size: 0.95rem;
-  color: #9ca3af;
-  line-height: 1.5;
-}
-
-.btn-explore {
+.btn-primary,
+.btn-secondary {
   display: block;
   box-sizing: border-box;
-  text-align: center;
-  text-decoration: none;
-  background-color: #f5c518;
-  color: #000000;
-  border: none;
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
   width: 100%;
-  max-width: 35rem;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  padding: 0.85rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
 }
 
-.btn-explore:hover {
+.btn-primary {
+  background-color: #f5c518;
+  color: #121212;
+}
+
+.btn-primary:hover {
   background-color: #d4a912;
 }
 
+.btn-secondary {
+  background-color: #1a1c20;
+  color: #f5c518;
+  border: 1px solid #262e3a;
+}
+
+.btn-secondary:hover {
+  background-color: #22252b;
+}
+
 @media (min-width: 768px) {
-  .welcome-card h1 {
-    font-size: 2.5rem;
+  .welcome-title {
+    font-size: 2.3rem;
   }
 }

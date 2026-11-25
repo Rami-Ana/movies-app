@@ -1,20 +1,35 @@
-<header>
-  <nav aria-label="Principal">
-    <ul>
-        <li><a routerLink="/">Inicio</a></li>
-        <li><a routerLink="/movies">Exploración</a></li>
-        <li><a routerLink="/favorites">Favoritas</a></li>
-        <li><a routerLink="/profile">Perfil</a></li>
+<header class="site-header">
+  <nav class="main-nav" aria-label="Principal">
+    <a class="brand-logo" routerLink="/">MOVIES</a>
 
-        @if (authReady()) {
-          @if (user()) {
-          <li>{{ user()?.displayName || user()?.email }}</li>
-          <li><button (click)="logout()">Cerrar sesión</button></li>
-          } @else {
-          <li><a routerLink="/login">Entrar</a></li>
-          <li><a routerLink="/register">Registrarse</a></li>
-          }
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/movies">Exploración</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/favorites">Favoritas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/profile">Perfil</a>
+      </li>
+
+      @if (authReady()) {
+        @if (user()) {
+          <li class="nav-item nav-user">
+            <span class="user-label">{{ user()?.displayName || user()?.email }}</span>
+          </li>
+          <li class="nav-item">
+            <button class="btn-logout" type="button" (click)="logout()">Cerrar sesión</button>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Entrar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-register" routerLink="/register">Registrarse</a>
+          </li>
         }
-      </ul>
+      }
+    </ul>
   </nav>
 </header>

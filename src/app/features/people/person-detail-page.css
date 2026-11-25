@@ -1,0 +1,112 @@
+.person-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  background-color: #121212;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.person-photo {
+  width: 140px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #252c37;
+  display: block;
+}
+
+.person-no-photo {
+  width: 140px;
+  height: 210px;
+  margin: 0;
+  border-radius: 8px;
+  background-color: #252c37;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.person-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.person-meta,
+.person-bio {
+  margin: 0.35rem 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #d1d5db;
+}
+
+.person-filmography {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 2.5rem;
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.filmography-title {
+  margin: 1.75rem 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.btn-show-more {
+  margin-top: 1.25rem;
+  width: 100%;
+  padding: 0.8rem 1.25rem;
+  background-color: #1a1c20;
+  color: #ffffff;
+  border: 1px solid #2e3440;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-show-more:hover {
+  background-color: #252930;
+  border-color: #f5c518;
+}
+
+.empty-message,
+.loading-message {
+  color: #9ca3af;
+}
+
+@media (min-width: 640px) {
+  .person-detail {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.75rem;
+  }
+
+  .movies-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .movies-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
