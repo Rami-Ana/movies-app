@@ -1,5 +1,9 @@
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background-color: #111317;
@@ -12,4 +16,13 @@ body {
     Helvetica,
     Arial,
     sans-serif;
+}
+
+h1, h2, h3, p {
+  overflow-wrap: break-word;
+}
+
+img {
+  max-width: 100%;
+
 }
