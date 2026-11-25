@@ -111,9 +111,9 @@ constructor() {
                 currentEntry?.isFavorite ??
                 false,
             rating:
-                changes.rating ??
-                currentEntry?.rating ??
-                null,
+                'rating' in changes
+                    ? (changes.rating ?? null)
+                    : (currentEntry?.rating ?? null),
             addedAt:
                 currentEntry?.addedAt ??
                 Date.now(),

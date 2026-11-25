@@ -1,0 +1,48 @@
+<section class="rating-input" [attr.aria-labelledby]="'rating-label-' + movie().id">
+  <p id="rating-label-{{ movie().id }}" class="rating-label">Tu puntuación</p>
+
+  <div
+    class="rating-options"
+    role="radiogroup"
+    [attr.aria-labelledby]="'rating-label-' + movie().id"
+  >
+    @for (value of ratings; track value) {
+      <label class="rating-option">
+        <input
+          type="radio"
+          [name]="'rating-' + movie().id"
+          [value]="value"
+          [checked]="currentRating() === value"
+          [disabled]="saving()"
+          (change)="selectRating(value)"
+        />
+        <span>{{ value }}</span>
+      </label>
+    }
+  </div>
+  
+  <p class="current-rating">
+    @if (currentRating() !== null) {
+      Tu nota: {{ currentRating() }}/10
+    } @else {
+      Aún no has puntuado esta película
+    }
+  </p>
+
+  <button
+    type="button"
+    class="clear-rating-btn"
+    [disabled]="saving() || currentRating() === null"
+    (click)="clearRating()"
+  >
+    Quitar puntuación
+  </button>
+
+  @if (successMessage()) {
+    <p class="feedback success" role="status">{{ successMessage() }}</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="feedback error" role="alert">{{ errorMessage() }}</p>
+  }
+</section>
