@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { UserMoviesService } from '../../core/services/user-movies-service';
 import { RouterLink } from '@angular/router';
+import { UserMoviesService } from '../../core/services/user-movies-service';
 import { TmdbImagePipe } from '../../shared/pipes/tmdb-image-pipe';
 
 @Component({
@@ -17,6 +17,7 @@ export class FavoritesPage {
   readonly entries = this.userMoviesService.entries;
 
   isLoaded = this.userMoviesService.loaded;
+  error = this.userMoviesService.error;
 
   selectedOrder = signal<'rating' | 'addedAt' | 'title'>('rating');
 
@@ -47,5 +48,38 @@ export class FavoritesPage {
   changeOrder(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedOrder.set(select.value as 'rating' | 'addedAt' | 'title');
+  }
+
+  // Cambia la puntuación (1 a 10) al pulsar uno de los botones y muestra el aviso
+  async setRating(movie: UserMovieEntry, rating: number, event: Event): Promise<void> {
+    event.stopPropagation();
+
+    const movieData = this.toModelMovie(movie);
+    await this.userMoviesService.save(movieData, { rating });
+
+    this.responseUserMessage.set(`Puntuación actualizada a ${rating}/10 para "${movie.title}".`);
+  }
+
+  // Abre el "¿Seguro?" en la tarjeta
+  openRemoveConfirm(movieId: number, event: Event): void {
+    event.stopPropagation();
+    this.confirmingRemoveId.set(movieId);
+  }
+
+  // Cancela el "¿Seguro?"
+  cancelRemoveConfirm(event: Event): void {
+    event.stopPropagation();
+    this.confirmingRemoveId.set(null);
+  }
+
+  // Quita de favoritas usando el servicio (conserva la nota si tiene, o borra el documento si no tiene)
+  async confirmRemoveFavorite(movie: UserMovieEntry, event: Event): Promise<void> {
+    event.stopPropagation();
+
+    const movieData = this.toModelMovie(movie);
+    await this.userMoviesService.save(movieData, { isFavorite: false });
+
+    this.confirmingRemoveId.set(null);
+    this.responseUserMessage.set(`"${movie.title}" quitada de favoritas.`);
   }
 }
