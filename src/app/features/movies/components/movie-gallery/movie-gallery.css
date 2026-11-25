@@ -17,3 +17,22 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+.movie-gallery-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.movie-gallery-pagination button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+}
+
+.movie-gallery-pagination button:hover {
+  background-color: #333;
+}
