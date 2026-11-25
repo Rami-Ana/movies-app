@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UserMoviesService } from '../../core/services/user-movies-service';
+import { ModelMovie } from '../../models/movie-model';
 
 @Component({
   imports: [],
@@ -6,4 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './favorites-page.css',
   templateUrl: './favorites-page.html',
 })
-export class FavoritesPage {}
+export class FavoritesPage {
+  private userMoviesService = inject(UserMoviesService);
+
+}
