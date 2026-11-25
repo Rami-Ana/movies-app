@@ -1,14 +1,14 @@
-<article>
-    <a [routerLink]="['/person', actor().id]">
+<article class="actor-card">
+    <a class="actor-link" [routerLink]="['/person', actor().id]">
         @if (actor().photo) {
-        <img [src]="'https://image.tmdb.org/t/p/w185' + actor().photo" [alt]="actor().name" />
+        <img class="actor-photo" [src]="'https://image.tmdb.org/t/p/w185' + actor().photo" [alt]="actor().name" />
         } @else {
-        <div aria-hidden="true">Sin foto</div>
+        <div class="actor-no-photo" aria-hidden="true">Sin foto</div>
         }
 
-        <p>{{ actor().name }}</p>
+        <p class="actor-name">{{ actor().name }}</p>
         @if (actor().character) {
-        <p>{{ actor().character }}</p>
+        <p class="actor-character">{{ actor().character }}</p>
         }
     </a>
 </article>

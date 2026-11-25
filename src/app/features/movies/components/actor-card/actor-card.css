@@ -1,0 +1,46 @@
+.actor-card {
+  background-color: #181b20;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.actor-link {
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.actor-photo {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.actor-no-photo {
+  width: 100%;
+  height: 220px;
+  background-color: #252c37;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.actor-name {
+  margin: 0.6rem 0.65rem 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.actor-character {
+  margin: 0 0.65rem 0.75rem;
+  font-size: 0.85rem;
+  color: #b8c0cc;
+}
+
+.actor-link:hover .actor-name {
+  color: #f5c518;
+}

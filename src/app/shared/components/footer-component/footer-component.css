@@ -1,0 +1,21 @@
+.site-footer {
+  padding: 1.5rem 1rem;
+  background-color: #111317;
+  border-top: 0.0625rem solid #272f3d;
+  text-align: center;
+}
+
+.site-footer-text {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.site-footer-link {
+  color: #f4c418;
+  text-decoration: none;
+}
+
+.site-footer-link:hover {
+  text-decoration: underline;
+}
