@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { deleteDoc, doc, getFirestore,setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getFirestore, setDoc } from 'firebase/firestore';
 import { UserMovieEntry } from '../../models/user-movie-entry';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
@@ -50,8 +50,7 @@ export class UserMoviesService {
 
     async save(movie: ModelMovie, changes: Partial<Pick<UserMovieEntry, 'isFavorite' | 'rating'>>,
     ): Promise<void> {
-        const currentEntry =
-            this.getEntry(movie.id);
+        const currentEntry = this.getEntry(movie.id);
 
         const entry: UserMovieEntry = {
             movieId: movie.id,
@@ -75,6 +74,13 @@ export class UserMoviesService {
                 Date.now(),
         };
 
+        if (shouldDelete(entry)) {
+            await this.remove(movie.id);
+            return;
+        }
+        const movieDoc = this.getMovieDoc(movie.id);
+
+        await setDoc(movieDoc,entry,);
     }
 
     getEntry(movieId: number,): UserMovieEntry | undefined {
