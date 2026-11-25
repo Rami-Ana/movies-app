@@ -36,6 +36,10 @@
         <p class="favorite-message" role="status">{{ favoriteMessage() }}</p>
       }
 
+      @if (ratingMovie(); as currentSummaryMovie) {
+        <app-rating-input [movie]="currentSummaryMovie" />
+      }
+
       @if (peli.tagline) {
         <p class="movie-tagline">{{ peli.tagline }}</p>
       }
@@ -43,9 +47,9 @@
       <p class="movie-meta">
         Año: {{ peli.releaseDate.slice(0, 4) }}
         @if (peli.runtime) {
-          - Duración: {{ peli.runtime }} min
+- Duración: {{ peli.runtime }} min
         }
-        - Nota: {{ peli.rating }}
+- Nota: {{ peli.rating }}
       </p>
 
       @if (peli.genres.length > 0) {
