@@ -1,3 +1,55 @@
-<p>favorites-page works!</p>
+<section class="favorites-page">
+    <h1>Mis favoritas</h1>
 
+    @if (!isLoaded()) {
+    <p>Cargando...</p>
 
+    } @else if (orderedFavorites().length === 0) {
+    <div class="empty-state">
+        <p>Aún no tienes favoritas</p>
+        <a routerLink="/movies">Ir a películas</a>
+    </div>
+
+    } @else {
+    <div class="sort-controls">
+        <p>Ordenar por:</p>
+        <select [value]="selectedOrder()" (change)="changeOrder($event)">
+            <option value="rating">Mi puntuación</option>
+            <option value="addedAt">Fecha añadida</option>
+            <option value="title">Título</option>
+        </select>
+    </div>
+
+    <div class="favorites-list">
+        @for (movie of orderedFavorites(); track movie.movieId) {
+        <article class="favorite-card" [routerLink]="['/movie', movie.movieId]">
+            <img [src]="movie.poster_path | tmdbImage" [alt]="movie.title" />
+
+            @if (selectedOrder() === 'rating' && movie.rating !== null && movie.rating !== undefined) {
+            <p>#{{ $index + 1 }}</p>
+            }
+
+            <h2>{{ movie.title }}</h2>
+
+            @if (movie.release_date) {
+            <p>Año: {{ movie.release_date.slice(0, 4) }}</p>
+            } @else {
+            <p>Año: Sin fecha</p>
+            }
+
+            @if (movie.rating !== null && movie.rating !== undefined) {
+            <p>Mi puntuación: {{ movie.rating }}</p>
+            } @else {
+            <p>Mi puntuación: Sin puntuar</p>
+            }
+
+            @if (movie.vote_average !== null && movie.vote_average !== undefined) {
+            <p>Nota pública: {{ movie.vote_average }}</p>
+            } @else {
+            <p>Nota pública: Sin nota</p>
+            }
+        </article>
+        }
+    </div>
+    }
+</section>
