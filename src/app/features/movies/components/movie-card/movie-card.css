@@ -3,6 +3,12 @@
        height: auto;
    }
 
+      app-favorite-button {
+       position: absolute;
+       top: 8px;
+       right: 8px;
+   }
+
    .movie-card {
        display: flex;
        flex-direction: column;
@@ -28,3 +34,8 @@
        font-size: 0.85rem;
        color: #9ca3af;
    }
+
+   .movie-card-wrapper {
+       position: relative;
+   }
+
