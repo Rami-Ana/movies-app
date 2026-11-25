@@ -41,15 +41,20 @@ export class FavoriteButton {
     this.errorMessage.set(null);
 
     try {
+      await this.userMoviesService.save(this.movie(), {
+        isFavorite: !this.isFavorite(),
+      });
+
       this.successMessage.set(
         this.isFavorite()
           ? 'Quitada de favoritas'
           : 'Añadida a favoritas',
       );
 
-      await this.userMoviesService.save(this.movie(), {
-        isFavorite: !this.isFavorite(),
-      });
+      setTimeout(() => {
+        this.successMessage.set(null);
+      }, 2000);
+
     } catch {
       this.errorMessage.set('No se pudo actualizar el favorito.');
     } finally {

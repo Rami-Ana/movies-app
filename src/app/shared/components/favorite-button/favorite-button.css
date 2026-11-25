@@ -1,0 +1,42 @@
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.fa-heart {
+  color: #f5b942;
+    transition: transform 0.2s ease;
+
+}
+
+button:hover .fa-heart {
+  transform: scale(1.1);
+}
+
+
+.favorite-button-container {
+  position: relative;
+}
+
+.favorite-toast {
+  position: absolute;
+
+  top: -40px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: #1f2937;
+  color: white;
+
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+
+  white-space: nowrap;
+
+  font-size: 0.85rem;
+
+  z-index: 10;
+}

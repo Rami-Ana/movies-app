@@ -1,6 +1,20 @@
-<article class="movie-card" [routerLink]="['/movie', movieData().id]">
-  <img [src]="movieData().poster_path | tmdbImage" [alt]="movieData().title" />
-  <h2>{{ movieData().title }}</h2>
-  <p>{{ movieData().release_date.slice(0, 4) }}</p>
-  <p>{{ movieData().vote_average.toFixed(1) }}</p>
-</article>
+<div class="movie-card-wrapper">
+
+  <article
+    class="movie-card"
+    [routerLink]="['/movie', movieData().id]"
+  >
+    <img
+      [src]="movieData().poster_path | tmdbImage"
+      [alt]="movieData().title"
+    />
+    <h2>{{ movieData().title }}</h2>
+    <p>{{ movieData().release_date.slice(0, 4) }}</p>
+    <p>{{ movieData().vote_average.toFixed(1) }}</p>
+
+  </article>
+
+  <app-favorite-button [movie]="movieData()">
+  </app-favorite-button>
+
+</div>

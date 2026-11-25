@@ -1,10 +1,9 @@
 import { Component, inject, } from '@angular/core';
 import { UserMoviesService } from '../../core/services/user-movies-service';
 import { ModelMovie } from '../../models/movie-model';
-import { FavoriteButton } from '../../shared/components/favorite-button/favorite-button';
 
 @Component({
-  imports: [FavoriteButton],
+  imports: [],
   selector: 'app-favorites-page',
   styleUrl: './favorites-page.css',
   templateUrl: './favorites-page.html',
