@@ -1,6 +1,8 @@
+
 <section class="favorites-page">
     <h1>Mis favoritas</h1>
 
+<<<<<<< HEAD
     @if (responseUserMessage()) {
     <p class="feedback-banner">{{ responseUserMessage() }}</p>
     }
@@ -14,6 +16,17 @@
         <a routerLink="/movies">Ir a películas</a>
     </p>
 
+=======
+@if (error()) {
+<p role="alert">{{ error() }}</p>
+} @else if (!loaded()) {
+<p role="status">Cargando tus favoritas...</p>
+} @else if (orderedFavorites().length === 0) {
+    <div class="empty-state">
+        <p>Aún no tienes favoritas</p>
+        <a routerLink="/movies">Ir a películas</a>
+    </div>
+>>>>>>> 452dea2a7a7c87603ed104ca787eb5c37cc6a84e
     } @else {
     <p class="sort-label">Ordenar por:</p>
     <select class="sort-select" [value]="selectedOrder()" (change)="changeOrder($event)">
