@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { UserMoviesService } from '../../core/services/user-movies-service';
 import { RouterLink } from '@angular/router';
 import { TmdbImagePipe } from '../../shared/pipes/tmdb-image-pipe';
+import { ModelMovie } from '../../models/movie-model';
 
 @Component({
   imports: [RouterLink, TmdbImagePipe],
