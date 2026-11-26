@@ -2,12 +2,15 @@
   @if (status() === 'success') {
     @if (filteredMovies().length === 0) {
       <p class="search-results-count">
+
         No se encontraron resultados.
+
       </p>
     } @else if (filteredMovies().length === 1) {
       <p class="search-results-count">
         <span>1</span> resultado encontrado.
       </p>
+
     } @else {
       <p class="search-results-count">
         <span>{{ filteredMovies().length }}</span> resultados encontrados.
@@ -16,20 +19,29 @@
   }
 </div>
 
-<app-movie-filters [genres]="genres()" [selectedGenre]="selectedGenre()" [minimumVote]="minimumVote()"
-  [sortOrder]="sortOrder()" (genreChange)="onGenreChange($event)" (minimumVoteChange)="onMinimumVoteChange($event)"
-  (sortOrderChange)="onSortOrderChange($event)">
+<app-movie-filters [genres]="genres()" 
+[selectedGenre]="selectedGenre()" 
+[minimumVote]="minimumVote()"
+[sortOrder]="sortOrder()" 
+(genreChange)="onGenreChange($event)" 
+(minimumVoteChange)="onMinimumVoteChange($event)"
+(sortOrderChange)="onSortOrderChange($event)">
 </app-movie-filters>
 
 @if (status() === 'loading') {
 <p class="movie-gallery-msj" role="status">Cargando películas...</p>
+
 } @else if (status() === 'error') {
 <p class="movie-gallery-msj" role="alert">No se pudieron cargar las películas.</p>
+
 <button type="button" (click)="loadMovies()">Reintentalo aquí</button>
 } @else {
 <section class="movie-gallery">
+
   @for (m of filteredMovies(); track m.id) {
-  <app-movie-card [movieData]="m"></app-movie-card>
+  <app-movie-card [movieData]="m">
+    
+  </app-movie-card>
   } @empty {
   <p class="movie-gallery-error">No hay películas para mostrar.</p>
   }

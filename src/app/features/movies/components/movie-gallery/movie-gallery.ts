@@ -177,16 +177,13 @@ export class MovieGallery {
 
   onGenreChange(genreId: number | null): void {
     this.selectedGenre.set(genreId);
-    // this.loadMovies();
   }
 
   onMinimumVoteChange(vote: number | null): void {
     this.minimumVote.set(vote);
-    // this.loadMovies();
   }
 
   onSortOrderChange(order: SortOrder): void {
     this.sortOrder.set(order);
-    // this.loadMovies();
   }
 }

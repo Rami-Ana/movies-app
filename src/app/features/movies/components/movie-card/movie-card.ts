@@ -5,11 +5,11 @@ import { TmdbImagePipe } from '../../../../shared/pipes/tmdb-image-pipe';
 import { FavoriteButton } from '../../../../shared/components/favorite-button/favorite-button';
 
 @Component({
-  imports: [TmdbImagePipe, RouterLink, FavoriteButton], // El pipe tmdbImage convierte /abc123.jpg en la dirección completa del póste
+  imports: [TmdbImagePipe, RouterLink, FavoriteButton], 
   selector: 'app-movie-card',
   styleUrl: './movie-card.css',
   templateUrl: './movie-card.html',
 })
 export class MovieCard {
-  movieData = input.required<ModelMovie>(); // Recibo pelicula ( y muestro)
+  movieData = input.required<ModelMovie>(); 
 }
