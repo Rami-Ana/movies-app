@@ -10,9 +10,10 @@ import { ModelMovie as MovieSummaryModel } from '../../../models/movie-model';
 import { AuthService } from '../../../core/services/auth-service';
 import { forkJoin } from 'rxjs';
 import { RatingInput } from '../../../shared/components/rating-input/rating-input';
+import { CommunityRating } from '../../../shared/components/community-rating/community-rating';
 
 @Component({
-  imports: [NotFoundPage, RouterLink, ActorCard,RatingInput],
+  imports: [NotFoundPage, RouterLink, ActorCard,RatingInput, CommunityRating],
   selector: 'app-movie-detail-page',
   styleUrl: './movie-detail-page.css',
   templateUrl: './movie-detail-page.html',

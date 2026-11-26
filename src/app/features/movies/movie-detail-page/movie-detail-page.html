@@ -40,6 +40,8 @@
         <app-rating-input [movie]="currentSummaryMovie" />
       }
 
+      <app-community-rating [movieId]="peli.id" />
+
       @if (peli.tagline) {
         <p class="movie-tagline">{{ peli.tagline }}</p>
       }
@@ -66,6 +68,7 @@
       @if (peli.directors.length > 0) {
         <h2 class="section-subtitle">Dirección</h2>
         <ul class="director-list">
+          
           @for (director of peli.directors; track director.id) {
             <li class="director-item">
               <a class="director-link" [routerLink]="['/person', director.id]">{{ director.name }}</a>
@@ -94,9 +97,11 @@
       @if (peli.trailerKey) {
         <h2 class="section-subtitle">Tráiler</h2>
         @if (!showTrailer()) {
-          <button class="btn-trailer" type="button" (click)="showTrailer.set(true)">Ver tráiler</button>
+          <button class="btn-trailer" type="button" 
+          (click)="showTrailer.set(true)">Ver tráiler</button>
         } @else {
-          <button class="btn-trailer" type="button" (click)="showTrailer.set(false)">Cerrar tráiler</button>
+          <button class="btn-trailer" type="button" 
+          (click)="showTrailer.set(false)">Cerrar tráiler</button>
           <iframe
             class="trailer-frame"
             [src]="getSafeTrailerUrl(peli.trailerKey)"

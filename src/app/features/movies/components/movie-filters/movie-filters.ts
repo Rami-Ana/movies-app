@@ -32,28 +32,6 @@ export class MovieFilters {
     this.genreChange.emit(genreId);
   }
 
-  onMinimumVoteChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-
-    if (input.validity.badInput) {
-      return;
-    }
-
-    if (input.value === '') {
-      this.minimumVoteChange.emit(null);
-      return;
-    }
-
-    const typed = Number(input.value);
-    const vote = Math.max(0, Math.min(10, typed));
-
-    if (vote !== typed) {
-      input.value = String(vote);
-    }
-
-    this.minimumVoteChange.emit(vote);
-  }
-
   onSortOrderChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const value = select.value as SortOrder;
@@ -65,5 +43,10 @@ export class MovieFilters {
     this.genreChange.emit(null);
     this.minimumVoteChange.emit(null);
     this.sortOrderChange.emit('popularity');
+    }
+
+  changeMinimumVote(delta: number): void {
+    const next = Math.min(10, Math.max(0, (this.minimumVote() ?? 0) + delta));
+    this.minimumVoteChange.emit(next === 0 ? null : next);
   }
 }

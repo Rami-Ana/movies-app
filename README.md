@@ -49,31 +49,8 @@ The TMDB API key is not stored in the repository.
 ## Git Workflow
 ### Branches
 ```
-main
-└── develop
-    ├── feature/setup
-    ├── feature/welcome
-    ├── feature/home-explore-link
-    ├── feature/hu-1-2-movies-list
-    ├── feature/hu-1-3-search
-    ├── feature/hu-1-4-filters
-    ├── feature/search-filter-integration
-    ├── fix/search-filters-integration
-    ├── refactor/movie-gallery-state
-    ├── feature/hu-1-6-api-connexion
-    ├── feature/hu-2-1-detail-routes
-    ├── 
-    ├── 
-    ├── 
-    ├── feature/hu-3-1-register
-    ├── feature/hu-3-2-login-logout
-    ├──
-    ├──
-    ├──
-    └── 
 
 ```
-
 ## Architecture
 ```
 ```text

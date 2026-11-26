@@ -22,36 +22,29 @@ export class MovieGallery {
 
   genres = signal<ModelGenre[]>([]);
 
-  // Gestión estado de filtros:
   selectedGenre = signal<number | null>(null);
   minimumVote = signal<number | null>(null);
   sortOrder = signal<SortOrder>('popularity');
 
-  // Datos y estado de la carga:
   movies = signal<ModelMovie[]>([]);
   query = signal('');
-  status = signal<'loading' | 'error' | 'succes'>('loading');
+  status = signal<'loading' | 'error' | 'success'>('loading');
 
-  // Estado de paginación:
   currentPage = signal(1);
   maxPage = signal(1);
   loadingMore = signal(false);
 
   ngOnInit(): void {
-    this.loadGenres(); // Cargar datos auxiliares para filtros.
+    this.loadGenres();  
 
     this.route.queryParamMap
       .pipe(
-        // 1 Extrae ?q= de la URL y limpia espacios
         map((params) => (params.get('q') ?? '').trim()),
 
-        // 2 Espera 350 ms tras el último cambio para no pedir por cada tecla
         debounceTime(350),
 
-        // 3 Si el texto resultante es igual al anterior, no repite la búsqueda
         distinctUntilChanged(),
 
-        // 4 Guarda la búsqueda, vuelve a página 1, vacía lista y marca carga
         tap((cleanQuery) => {
           this.query.set(cleanQuery);
           this.currentPage.set(1);
@@ -60,7 +53,6 @@ export class MovieGallery {
           this.status.set('loading');
         }),
 
-        // 5 Lanza la petición de la página 1 y cancela la anterior si llega otra
         switchMap((cleanQuery) => {
           const request$ =
             cleanQuery.length < 2
@@ -82,16 +74,14 @@ export class MovieGallery {
 
         this.movies.set(response.results);
         this.currentPage.set(response.page);
-        // TMDB tiene límite máximo de 500 páginas
         this.maxPage.set(response.total_pages > 500 ? 500 : response.total_pages);
 
         if (this.status() !== 'error') {
-          this.status.set('succes');
+          this.status.set('success');
         }
       });
   }
 
-  // Carga la siguiente página y la suma a la lista actual (sin borrar lo anterior)
   loadMore(): void {
     const nextPage = this.currentPage() + 1;
 
@@ -120,11 +110,10 @@ export class MovieGallery {
     });
   }
 
-  // Botón de reinicio (ordenes) cuando falla la carga inicial
   loadMovies(): void {
-    this.status.set('loading'); //pon loading
-    this.currentPage.set(1); // vuelve a pagina 1
-    this.movies.set([]); //vacia la lista de peliculas
+    this.status.set('loading');
+    this.currentPage.set(1);
+    this.movies.set([]);  
 
     const cleanQuery = this.query();
     const request$ =
@@ -137,7 +126,7 @@ export class MovieGallery {
         this.movies.set(response.results);
         this.currentPage.set(response.page);
         this.maxPage.set(response.total_pages > 500 ? 500 : response.total_pages);
-        this.status.set('succes');
+        this.status.set('success');
       },
       error: () => {
         this.status.set('error');
@@ -151,11 +140,9 @@ export class MovieGallery {
         this.genres.set(response.genres);
       },
       error: () => this.genres.set([]),
-      // sin géneros el filtro queda vacío, pero la galería sigue funcionando
     });
   }
 
-  // Aplicar filtros: Transformar la lista de películas.
   filteredMovies = computed(() => {
     let filtered = this.movies();
     const genre = this.selectedGenre();
@@ -172,7 +159,6 @@ export class MovieGallery {
       );
     }
 
-    // Orden de visualización:
     switch (sortOrder) {
       case 'popularity':
         return [...filtered].sort((a, b) => b.popularity - a.popularity);
@@ -189,19 +175,15 @@ export class MovieGallery {
     }
   });
 
-  //mis mensajeros: reaccionan a eventos ( se ejecutan cuando cambia un filtro movie-filters)
   onGenreChange(genreId: number | null): void {
     this.selectedGenre.set(genreId);
-    this.loadMovies();
   }
 
   onMinimumVoteChange(vote: number | null): void {
     this.minimumVote.set(vote);
-    this.loadMovies();
   }
 
   onSortOrderChange(order: SortOrder): void {
     this.sortOrder.set(order);
-    this.loadMovies();
   }
 }

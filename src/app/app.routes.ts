@@ -10,6 +10,7 @@ import { NotFoundPage } from './features/not-found/not-found-page';
 import { Login } from './features/auth/components/login/login';
 import { authGuard } from './core/guards/auth-guard';
 import { guestGuard } from './core/guards/guest-guard';
+import { StatsPage } from './features/stats/stats-page';
 
 export const routes: Routes = [
   { path: '', component: HomePage },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'login', component: Login, canActivate: [guestGuard], },
   { path: 'favorites', component: FavoritesPage, canActivate: [authGuard], },
   { path: 'profile', component: ProfilePage, canActivate: [authGuard], },
+  { path: 'stats', component: StatsPage, canActivate: [authGuard], title: 'Top 10 Comunidad' },
 
   { path: '**', component: NotFoundPage },
 ];
