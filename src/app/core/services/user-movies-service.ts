@@ -1,5 +1,5 @@
 import { inject, Injectable, signal, effect } from '@angular/core';
-import { deleteDoc, doc, getFirestore, setDoc, onSnapshot, collection, runTransaction } from 'firebase/firestore';
+import { doc, getFirestore, setDoc, onSnapshot, collection, runTransaction } from 'firebase/firestore';
 import { UserMovieEntry } from '../../models/user-movie-entry';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
@@ -85,10 +85,29 @@ export class UserMoviesService {
         );
     }
 
-    async remove(movieId: number): Promise<void> {
-        const movieDoc = this.getMovieDoc(movieId);
-        await deleteDoc(movieDoc);
-    }
+async remove(movieId: number): Promise<void> {
+    const userMovieRef = this.getMovieDoc(movieId);
+
+    await runTransaction(this.db, async (transaction) => {
+        // 1. LECTURAS
+        const snapshot = await transaction.get(userMovieRef);
+        if (!snapshot.exists()) {
+            return;
+        }
+
+        const entry = snapshot.data() as UserMovieEntry;
+
+        await this.movieStatsService.updateRatingInTransaction(
+            transaction,
+            { movieId, title: entry.title, poster_path: entry.poster_path },
+            entry.rating ?? null,
+            null,
+        );
+
+        // 2. ESCRITURA
+        transaction.delete(userMovieRef);
+    });
+}
 
     async save(
         movie: ModelMovie,
