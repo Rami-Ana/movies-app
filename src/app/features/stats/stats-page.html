@@ -1,0 +1,37 @@
+<section class="stats-page">
+    <header class="stats-header">
+        <h1>Top 10 de la Comunidad</h1>
+        <p>Las películas mejor valoradas por los usuarios de la app</p>
+    </header>
+
+    @if (loading()) {
+    <p class="stats-status">Cargando ranking...</p>
+    } @else if (topMovies().length === 0) {
+    <p class="stats-status">Aún no hay películas puntuadas por la comunidad.</p>
+    } @else {
+    <ol class="ranking-list">
+        @for (movie of topMovies(); track movie.movieId; let i = $index) {
+        <li class="ranking-item">
+            <span class="ranking-position">#{{ i + 1 }}</span>
+
+            @if (movie.poster_path) {
+            <img class="ranking-poster" 
+            [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path"
+            [alt]="movie.title" />
+            }
+
+            <div class="ranking-info">
+                <a [routerLink]="['/movies', movie.movieId]" class="ranking-title">
+                    {{ movie.title }}
+                </a>
+                <span class="ranking-votes">{{ movie.ratingCount }} votos</span>
+            </div>
+
+            <div class="ranking-score">
+                <strong>{{ movie.average.toFixed(1) }}</strong> / 10
+            </div>
+        </li>
+        }
+    </ol>
+    }
+</section>
