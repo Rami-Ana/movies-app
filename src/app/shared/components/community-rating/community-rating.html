@@ -1,0 +1,8 @@
+@if (stats() && stats()!.ratingCount > 0) {
+<p class="community-rating">
+    Nota Movies: <strong>{{ stats()!.average.toFixed(1) }}</strong> / 10
+    ({{ stats()!.ratingCount }} votos)
+</p>
+} @else {
+<p class="community-rating">Nota Movies: Sin votos aún</p>
+}
