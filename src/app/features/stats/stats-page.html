@@ -15,8 +15,9 @@
             <span class="ranking-position">#{{ i + 1 }}</span>
 
             @if (movie.poster_path) {
-            <img class="ranking-poster" [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path"
-                [alt]="movie.title" />
+            <img class="ranking-poster" 
+            [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path"
+            [alt]="movie.title" />
             }
 
             <div class="ranking-info">
