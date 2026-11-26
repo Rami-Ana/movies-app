@@ -1,11 +1,12 @@
 import { inject, Injectable, signal, effect } from '@angular/core';
-import { deleteDoc, doc, getFirestore, setDoc, onSnapshot, collection } from 'firebase/firestore';
+import { deleteDoc, doc, getFirestore, setDoc, onSnapshot, collection, runTransaction } from 'firebase/firestore';
 import { UserMovieEntry } from '../../models/user-movie-entry';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
 import { AuthService } from './auth-service';
 import { ModelMovie } from '../../models/movie-model';
 import { shouldDelete } from '../utils/should-delete/should-delete';
+import { MovieStatsService } from './movie-stats-service';
 
 @Injectable({ providedIn: 'root' })
 export class UserMoviesService {
@@ -13,6 +14,7 @@ export class UserMoviesService {
 
     private readonly app = initializeApp(environment.firebase);
     private readonly db = getFirestore(this.app);
+    private readonly movieStatsService = inject(MovieStatsService);
 
     private unsubscribeSnapshot: (() => void) | null = null;
 
@@ -24,8 +26,8 @@ export class UserMoviesService {
 
     private readonly _error = signal<string | null>(null);
     readonly error = this._error.asReadonly();
-    
-constructor() {
+
+    constructor() {
         effect(() => {
             const user = this.authService.user();
 
@@ -66,9 +68,7 @@ constructor() {
     private getUserUid(): string {
         const user = this.authService.user();
 
-        if (!user) {
-            throw new Error('No hay usuario autenticado');
-        }
+        if (!user) {throw new Error('No hay usuario autenticado');}
 
         return user.uid;
     }
@@ -119,14 +119,30 @@ constructor() {
                 Date.now(),
         };
 
-        if (shouldDelete(entry)) {
-            await this.remove(movie.id);
-            return;
-        }
+        const userMovieRef = this.getMovieDoc(movie.id);
+        const newRating = entry.rating;
 
-        const movieDoc = this.getMovieDoc(movie.id);
+        await runTransaction(this.db, async (transaction) => {
+            // 1. LECTURAS (todas antes de escribir)
+            const userSnapshot = await transaction.get(userMovieRef);
+            const oldRating = userSnapshot.exists()
+                ? ((userSnapshot.data() as UserMovieEntry).rating ?? null)
+                : null;
 
-        await setDoc(movieDoc, entry);
+            await this.movieStatsService.updateRatingInTransaction(
+                transaction,
+                { movieId: movie.id, title: movie.title, poster_path: movie.poster_path },
+                oldRating,
+                newRating,
+            );
+
+            // 2. ESCRITURA del usuario
+            if (shouldDelete(entry)) {
+                transaction.delete(userMovieRef);
+            } else {
+                transaction.set(userMovieRef, entry);
+            }
+        });
     }
 
     getEntry(movieId: number): UserMovieEntry | undefined {
