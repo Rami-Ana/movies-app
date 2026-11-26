@@ -4,7 +4,6 @@ export const environment = {
   tmdbApiKey: 'YOUR_API_KEY_HERE',
   baseUrl: 'https://api.themoviedb.org/3',
 
-  // Your web app's Firebase configuration
   firebase: {
     apiKey: '',
     authDomain: '',

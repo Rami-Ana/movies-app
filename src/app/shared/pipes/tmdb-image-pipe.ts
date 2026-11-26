@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TmdbImagePipe implements PipeTransform {
   transform(path: string | null | undefined, size = 'w500'): string {
     if (!path) {
-      return '/assets/no-poster.png'; // cambia por tu ruta real o imagen por defecto
+      return '/assets/no-poster.png'; 
     }
 
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
