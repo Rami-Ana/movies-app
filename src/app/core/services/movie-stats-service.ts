@@ -1,4 +1,4 @@
-import { doc, getDoc, getFirestore, Transaction } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, Transaction } from 'firebase/firestore';
 import { MovieStatsModel } from '../../models/movie-stats-model';
 import { Injectable } from '@angular/core';
 import { applyRatingChange, RatingTotals } from '../utils/apply-rating-change/apply-rating-change';
@@ -51,6 +51,13 @@ export class MovieStatsService {
   }
 
   async getTopMovies(max: number): Promise<MovieStatsModel[]> {
-    return []; // de momento solo la estructura
+    const topQuery = query(
+      collection(this.db, movieStatsCollection),
+      orderBy('average', 'desc'),
+      limit(max),
+    );
+
+    const snapshot = await getDocs(topQuery);
+    return snapshot.docs.map((document) => document.data() as MovieStatsModel);
   }
 }
