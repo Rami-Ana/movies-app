@@ -13,8 +13,8 @@ import { MovieCard } from '../movies/components/movie-card/movie-card';
   templateUrl: './person-detail-page.html',
 })
 export class PersonDetailPage implements OnInit {
-  private route = inject(ActivatedRoute); // traigo route para leer la url
-  private movieService = inject(MovieService); // traigo para poder pedirle los datos a TMDB
+  private route = inject(ActivatedRoute); 
+  private movieService = inject(MovieService); 
   private titleService = inject(Title);
 
   id = signal<number | null>(null);
@@ -30,7 +30,7 @@ export class PersonDetailPage implements OnInit {
       const rawId = params.get('id');
       const numericId = Number(rawId);
 
-      // Comprobamos que rawId no esté vacío y que numericId sea un entero positivo (ej. 287)
+  
       if (rawId && Number.isInteger(numericId) && numericId > 0) {
         this.id.set(numericId);
         this.castLimit.set(20);
@@ -39,15 +39,15 @@ export class PersonDetailPage implements OnInit {
         // Pedimos los datos de la persona
         this.movieService.getPersonDetails(numericId).subscribe((personData) => {
           this.person.set(personData);
-          this.titleService.setTitle(`${personData.name} - Movies App`); // <-- Cambia el <title>
+          this.titleService.setTitle(`${personData.name} - Movies App`); 
         });
 
-        // Pedimos las películas de la persona (reparto y dirección)
+
         this.movieService.getPersonMovieCredits(numericId).subscribe((credits) => {
           const orderedCast = this.orderNewestFirst(credits.cast);
           this.castMovies.set(orderedCast);
 
-          // filtramos y ordenamos las dirigidas
+
           const directed = credits.crew.filter((crewItem) => crewItem.job === 'Director');
           const orderedDirected = this.orderNewestFirst(directed);
           this.directedMovies.set(orderedDirected);
