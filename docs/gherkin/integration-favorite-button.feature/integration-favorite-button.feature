@@ -7,7 +7,7 @@ Feature: Marcar y desmarcar una película como favorita desde el botón
 
   Scenario: Usuario sin sesión es enviado al login
     Given un usuario sin sesión iniciada
-    When pulsa el botón de favorita
+    When pulsa el botón de favorita 
     Then se navega a "/login" con el returnUrl de la página actual
     And no se guarda nada
 
