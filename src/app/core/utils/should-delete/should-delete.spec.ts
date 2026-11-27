@@ -1,21 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ShouldDeleteTs } from './should-delete.ts.js';
+import { shouldDelete } from './should-delete';
 
-describe('ShouldDeleteTs', () => {
-  let component: ShouldDeleteTs;
-  let fixture: ComponentFixture<ShouldDeleteTs>;
+describe('shouldDelete', () => {
+  it('devuelve true si no es favorita y no tiene puntuación', () => {
+    const entry = {
+      movieId: 1,
+      title: 'Película de prueba',
+      poster_path: null,
+      release_date: '2020-01-01',
+      genre_ids: [],
+      isFavorite: false,
+      rating: null,
+      addedAt: 0,
+    };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ShouldDeleteTs],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(ShouldDeleteTs);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(shouldDelete(entry)).toBe(true);
   });
 });
