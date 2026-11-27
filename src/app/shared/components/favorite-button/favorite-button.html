@@ -1,32 +1,21 @@
 <div class="favorite-button-container">
 
   @if (successMessage(); as message) {
-    <p class="favorite-toast" aria-live="polite">
-      {{ message }}
-    </p>
+    <p class="favorite-toast" aria-live="polite">{{ message }}</p>
   }
 
-  @if (errorMessage(); as message) {
-  <p role="alert">
-    {{ message }}
-  </p>
+  @if (errorMessage(); as message) {<p role="alert">{{ message }}</p>
 }
 
 <button
-  type="button"
-  [disabled]="saving()"
-  (click)="toggleFavorite()"
-  [attr.aria-pressed]="isFavorite()"
-  [attr.aria-label]="
+  type="button" [disabled]="saving()" (click)="toggleFavorite()" [attr.aria-pressed]="isFavorite()" [attr.aria-label]="
     isFavorite()
       ? 'Quitar ' + movie().title + ' de favoritas'
       : 'Añadir ' + movie().title + ' a favoritas'
   "
 >
-  @if (isFavorite()) {
-    <i class="fa-solid fa-heart"></i>
-  } @else {
-    <i class="fa-regular fa-heart"></i>
+  @if (isFavorite()) {<i class="fa-solid fa-heart"></i>
+  } @else {<i class="fa-regular fa-heart"></i>
   }
 </button>
 </div>
